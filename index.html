@@ -772,16 +772,34 @@ function renderGenreView(){
   // Collect all films matching genre, group by canonical title
   // If same title appears in multiple places, merge appearances into one card
   const byTitle = new Map();
+
+  // Festival films
   festOrder.filter(f=>f!=='mubi'&&DATA[f]).forEach(fest=>{
     YEARS.forEach(year=>{
       (DATA[fest]&&DATA[fest].years[year]||[]).filter(f=>f.g===activeGenre).forEach(film=>{
         const key = film.t.toLowerCase().trim();
         if(!byTitle.has(key)){
-          byTitle.set(key, {film, appearances:[{fest,year,award:film.a,status:film.s}]});
+          byTitle.set(key, {film, appearances:[{fest,year,award:film.a,status:film.s,isMubi:false}]});
         } else {
-          byTitle.get(key).appearances.push({fest,year,award:film.a,status:film.s});
+          byTitle.get(key).appearances.push({fest,year,award:film.a,status:film.s,isMubi:false});
         }
       });
+    });
+  });
+
+  // MUBI collection films — merge into existing entries or add new ones
+  MUBI_COLLECTIONS.forEach(col=>{
+    col.films.filter(f=>f.g===activeGenre).forEach(film=>{
+      const key = film.t.toLowerCase().trim();
+      const mubiAppearance = {fest:'mubi',year:film.y,award:`MUBI · ${col.label}`,status:'notable',isMubi:true};
+      if(!byTitle.has(key)){
+        // New entry from MUBI only — use 'buzz' status so it sorts reasonably
+        const festFilm = {...film, s:'buzz', a:`MUBI · ${col.label}`};
+        byTitle.set(key, {film:festFilm, appearances:[mubiAppearance]});
+      } else {
+        // Already exists from festival data — just add MUBI as another appearance
+        byTitle.get(key).appearances.push(mubiAppearance);
+      }
     });
   });
 
@@ -829,8 +847,10 @@ function renderGenreView(){
 
       // Build appearances badge string
       const appBadges = appearances.map(a=>{
-        const col = a.status==='winner'?'var(--gold)':a.status==='runner'?'var(--muted)':a.status==='buzz'?'#7fa8cc':'var(--dim)';
-        return `<span style="font-size:.6rem;color:${col};background:var(--surf2);padding:.12rem .45rem;border-radius:3px;white-space:nowrap">${festShort[a.fest]} ${a.year}</span>`;
+        const col = a.isMubi?'#c090e0':a.status==='winner'?'var(--gold)':a.status==='runner'?'var(--muted)':a.status==='buzz'?'#7fa8cc':'var(--dim)';
+        const bg = a.isMubi?'rgba(180,120,200,.12)':'var(--surf2)';
+        const label = a.isMubi?a.award:`${festShort[a.fest]} ${a.year}`;
+        return `<span style="font-size:.6rem;color:${col};background:${bg};padding:.12rem .45rem;border-radius:3px;white-space:nowrap">${label}</span>`;
       }).join(' ');
 
       h+=`
