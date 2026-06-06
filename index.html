@@ -123,6 +123,9 @@ h1 em{font-style:italic;color:var(--gold)}
 .film-card.expanded .card-detail{display:block}
 .detail-desc{font-size:.83rem;color:var(--muted);line-height:1.72;padding-top:.8rem;margin-bottom:.8rem}
 .detail-row{display:flex;gap:.45rem;margin-bottom:.3rem;font-size:.76rem}
+.trailer-link{display:inline-flex;align-items:center;gap:.35rem;margin-top:.75rem;font-size:.75rem;color:var(--gold);text-decoration:none;border:1px solid var(--gold-bord);padding:.25rem .65rem;border-radius:4px;transition:background .13s}
+.trailer-link:hover{background:var(--gold-bg)}
+.trailer-link svg{flex-shrink:0}
 .dk{color:var(--dim);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;min-width:72px;padding-top:1px}
 .dv{color:var(--muted)}
 .dv strong{color:var(--text);font-weight:400}
@@ -538,6 +541,8 @@ function renderContent(){
                 ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
                 ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
                 ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>★ ${film.r}</strong></span></div>`:''}
+              </div>
+              ${film.t&&film.t!=='(Festival cancelled — COVID-19)'&&film.t!=='(Winner not confirmed)'?`<a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>`:''}
               </div>
             </div>
           </div>`;
