@@ -483,6 +483,7 @@ let activeFest = 'cannes';
 let activeYear = 2025;
 let activeGenre = 'All';
 let hideSeen = false;
+let genreMode = false;
 
 // ── STORAGE ───────────────────────────────────────────────────────
 function seenKey(fest,year,title){return `seen:${fest}:${year}:${title.replace(/\s+/g,'_')}`}
@@ -545,36 +546,109 @@ function renderSidebar(){
   h+=`</div><hr class="sb-divider">`;
   const {seen,total}=seenCount(activeFest);
   if(seen>0)h+=`<div class="seen-count">✓ ${seen} of ${total} seen across all years</div>`;
+  h+=`<hr class="sb-divider">`;
+  h+=`<div class="sb-label">Browse by genre</div>`;
+  ALL_GENRES.filter(g=>g!=='All').forEach(g=>{
+    const isActive=genreMode&&activeGenre===g;
+    h+=`<button class="sb-btn${isActive?' active':''}" style="${isActive?'':'color:var(--dim)'}" onclick="setGenre('${g}')">${g}</button>`;
+  });
   document.getElementById('sidebar').innerHTML=h;
 }
 
-// ── RENDER CONTENT ────────────────────────────────────────────────
+// ── CARD HTML helper (shared by both views) ─────────────────────
+function filmCardHTML(film,fest,year,i,groupLabel){
+  const uid=`${fest}_${year}_${i}_${groupLabel.replace(/\s/g,'_')}`;
+  const seen=isSeen(fest,year,film.t);
+  const seenHidden=hideSeen&&seen;
+  const safeTitle=film.t.replace(/'/g,"\\'");
+  return `
+    <div class="film-card${film.s==='winner'?' winner':''}${seen?' seen':''}${seenHidden?' hidden-seen':''}" id="card-${uid}">
+      <div class="card-head" onclick="toggle('${uid}',event)">
+        <div class="card-icon ${iconClass(film.s)}">${iconText(film.s)}</div>
+        <div class="card-titles">
+          <div class="card-title">${film.t}</div>
+          <div class="card-sub">Dir. ${film.d}${film.c?' · '+film.c:''}</div>
+        </div>
+        <div class="card-right">
+          ${film.a?`<span class="award-pill ${pillClass(film.s)}">${film.a}</span>`:''}
+          ${film.g?`<span class="genre-badge">${film.g}</span>`:''}
+          ${film.r?`<span class="rating">\u2605 ${film.r}</span>`:''}
+          <div class="seen-cb-wrap" onclick="toggleSeenCard('${fest}','${year}','${safeTitle}','${uid}',event)">
+            <div class="seen-cb" title="${seen?'Mark unseen':'Mark as seen'}">
+              <span class="seen-check">\u2713</span>
+            </div>
+          </div>
+          <span class="chevron">\u25bc</span>
+        </div>
+      </div>
+      <div class="card-detail">
+        ${film.desc?`<p class="detail-desc">${film.desc}</p>`:''}
+        <div>
+          ${film.g?`<div class="detail-row"><span class="dk">Genre</span><span class="dv"><strong>${film.g}</strong></span></div>`:''}
+          ${film.rt?`<div class="detail-row"><span class="dk">Runtime</span><span class="dv">${film.rt}</span></div>`:''}
+          ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
+          ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
+          ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>\u2605 ${film.r}</strong></span></div>`:''}
+        </div>
+        ${(film.t&&film.t.indexOf('Festival cancelled')<0&&film.t.indexOf('Winner not confirmed')<0)?`<a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>`:''}
+      </div>
+    </div>`;
+}
+
+// ── GENRE BROWSER (all fests + all years) ────────────────────────
+function renderGenreView(){
+  let matched=0;
+  let h=`
+    <div class="fest-head">
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <div class="fest-name" style="font-size:1.4rem">${activeGenre}</div>
+        <button onclick="clearGenre()" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.72rem;padding:.25rem .65rem;border-radius:20px;cursor:pointer">\u2715 Clear filter</button>
+      </div>
+      <p class="fest-desc" style="margin-top:.5rem">All <strong style="color:var(--text)">${activeGenre}</strong> films across every festival and year — 2020 to 2025.</p>
+    </div>
+    <div class="controls" style="padding-bottom:1rem">
+      <select class="genre-sel" onchange="setGenre(this.value)">`;
+  ALL_GENRES.forEach(g=>{h+=`<option value="${g}"${g===activeGenre?' selected':''}>${g}</option>`;});
+  h+=`</select>
+      <button class="hide-seen-btn${hideSeen?' active':''}" onclick="toggleHideSeen()">${hideSeen?'Show all':'Hide seen'}</button>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><span class="leg-dot ld-w"></span>Winner</div>
+      <div class="leg-item"><span class="leg-dot ld-r"></span>Runner-up</div>
+      <div class="leg-item"><span class="leg-dot ld-b"></span>Notable buzz</div>
+      <div class="leg-item"><span class="leg-dot ld-n"></span>Entry</div>
+    </div>`;
+  festOrder.forEach(fest=>{
+    YEARS.forEach(year=>{
+      const films=(DATA[fest].years[year]||[]).filter(f=>f.g===activeGenre);
+      if(!films.length)return;
+      h+=`<div class="sec-label">${festShort[fest]} \u00b7 ${year}</div>`;
+      films.forEach((film,i)=>{matched++;h+=filmCardHTML(film,fest,year,i,`${fest}_${year}`);});
+    });
+  });
+  if(!matched)h+=`<div class="empty-msg">No films found for "${activeGenre}".</div>`;
+  document.getElementById('content').innerHTML=h;
+}
+
+// ── RENDER CONTENT (normal festival/year view) ────────────────────
 function renderContent(){
+  if(genreMode){renderGenreView();return;}
   const f=DATA[activeFest];
-  const films=(f.years[activeYear]||[]).filter(film=>
-    activeGenre==='All'||film.g===activeGenre
-  );
+  const films=(f.years[activeYear]||[]);
   const groups=[
     {label:'Winner',list:films.filter(f=>f.s==='winner')},
     {label:'Runners-up & awards',list:films.filter(f=>f.s==='runner')},
     {label:'Notable buzz',list:films.filter(f=>f.s==='buzz')},
     {label:'Competition entries',list:films.filter(f=>f.s==='notable')},
   ].filter(g=>g.list.length>0);
-
-  // mobile year strip
   let yearStrip='';
   if(isMobile()){
     yearStrip=`<div class="mobile-year-strip">`;
-    YEARS.forEach(y=>{
-      yearStrip+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
-    });
+    YEARS.forEach(y=>{yearStrip+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;});
     yearStrip+=`</div>`;
   }
-
-  // seen count for mobile
   const {seen:sc,total:st}=seenCount(activeFest);
-  const seenLine=sc>0?`<div style="font-size:.72rem;color:var(--seen);margin-top:.3rem">✓ ${sc} of ${st} seen across all years</div>`:'';
-
+  const seenLine=sc>0?`<div style="font-size:.72rem;color:var(--seen);margin-top:.3rem">\u2713 ${sc} of ${st} seen across all years</div>`:'';
   let h=`
     ${yearStrip}
     <div class="fest-head">
@@ -588,16 +662,12 @@ function renderContent(){
     </div>
     <div class="controls">
       <div class="year-pills">`;
-  YEARS.forEach(y=>{
-    h+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
-  });
+  YEARS.forEach(y=>{h+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;});
   h+=`</div><div class="ctrl-sep"></div>
       <select class="genre-sel" onchange="setGenre(this.value)">`;
   ALL_GENRES.forEach(g=>{h+=`<option value="${g}"${g===activeGenre?' selected':''}>${g}</option>`;});
   h+=`</select>
-      <button class="hide-seen-btn${hideSeen?' active':''}" onclick="toggleHideSeen()">
-        ${hideSeen?'Show all':'Hide seen'}
-      </button>
+      <button class="hide-seen-btn${hideSeen?' active':''}" onclick="toggleHideSeen()">${hideSeen?'Show all':'Hide seen'}</button>
     </div>
     <div class="legend">
       <div class="leg-item"><span class="leg-dot ld-w"></span>Winner</div>
@@ -605,49 +675,12 @@ function renderContent(){
       <div class="leg-item"><span class="leg-dot ld-b"></span>Notable buzz</div>
       <div class="leg-item"><span class="leg-dot ld-n"></span>Competition entry</div>
     </div>`;
-
   if(!films.length){
-    h+=`<div class="empty-msg">No films match this filter.</div>`;
+    h+=`<div class="empty-msg">No films for this year.</div>`;
   } else {
     groups.forEach(({label,list})=>{
       h+=`<div class="sec-label">${label}</div>`;
-      list.forEach((film,i)=>{
-        const uid=`${activeFest}_${activeYear}_${i}_${label.replace(/\s/g,'_')}`;
-        const seen=isSeen(activeFest,activeYear,film.t);
-        const seenHidden=hideSeen&&seen;
-        h+=`
-          <div class="film-card${film.s==='winner'?' winner':''}${seen?' seen':''}${seenHidden?' hidden-seen':''}" id="card-${uid}">
-            <div class="card-head" onclick="toggle('${uid}',event)">
-              <div class="card-icon ${iconClass(film.s)}">${iconText(film.s)}</div>
-              <div class="card-titles">
-                <div class="card-title">${film.t}</div>
-                <div class="card-sub">Dir. ${film.d}${film.c?' · '+film.c:''}</div>
-              </div>
-              <div class="card-right">
-                ${film.a?`<span class="award-pill ${pillClass(film.s)}">${film.a}</span>`:''}
-                ${film.g?`<span class="genre-badge">${film.g}</span>`:''}
-                ${film.r?`<span class="rating">★ ${film.r}</span>`:''}
-                <div class="seen-cb-wrap" onclick="toggleSeenCard('${activeFest}','${activeYear}','${film.t.replace(/'/g,"\\'")}','${uid}',event)">
-                  <div class="seen-cb" title="${seen?'Mark unseen':'Mark as seen'}">
-                    <span class="seen-check">✓</span>
-                  </div>
-                </div>
-                <span class="chevron">▼</span>
-              </div>
-            </div>
-            <div class="card-detail">
-              ${film.desc?`<p class="detail-desc">${film.desc}</p>`:''}
-              <div>
-                ${film.g?`<div class="detail-row"><span class="dk">Genre</span><span class="dv"><strong>${film.g}</strong></span></div>`:''}
-                ${film.rt?`<div class="detail-row"><span class="dk">Runtime</span><span class="dv">${film.rt}</span></div>`:''}
-                ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
-                ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
-                ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>★ ${film.r}</strong></span></div>`:''}
-              </div>
-              ${film.t&&film.t!=='(Festival cancelled — COVID-19)'&&film.t!=='(Winner not confirmed)'?`<a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>`:''}
-            </div>
-          </div>`;
-      });
+      list.forEach((film,i)=>{h+=filmCardHTML(film,activeFest,activeYear,i,label);});
     });
   }
   document.getElementById('content').innerHTML=h;
@@ -670,7 +703,16 @@ function setFest(id){
   if(isMobile())window.scrollTo({top:0,behavior:'smooth'});
 }
 function setYear(y){activeYear=y;renderAll()}
-function setGenre(g){activeGenre=g;renderContent()}
+function setGenre(g){
+  activeGenre=g;
+  genreMode=(g!=='All');
+  renderAll();
+}
+function clearGenre(){
+  activeGenre='All';
+  genreMode=false;
+  renderAll();
+}
 function toggleHideSeen(){hideSeen=!hideSeen;renderContent()}
 
 function renderAll(){
