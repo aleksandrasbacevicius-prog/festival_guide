@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indie & Arthouse Film Festivals 2020–2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e10;--surf:#17171a;--surf2:#1f1f23;--surf3:#27272c;
+  --border:rgba(255,255,255,0.07);--bord2:rgba(255,255,255,0.13);--bord3:rgba(255,255,255,0.2);
+  --text:#e5e3de;--muted:#8a8880;--dim:#52514e;
+  --gold:#c9a84c;--gold-bg:rgba(201,168,76,0.1);--gold-bord:rgba(201,168,76,0.28);
+  --seen-bg:rgba(90,160,90,0.07);--seen-bord:rgba(90,160,90,0.25);--seen:#5aa060;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+
+/* ── HEADER ── */
+header{padding:4rem 2.5rem 2.5rem;max-width:1260px;margin:0 auto;border-bottom:1px solid var(--border)}
+.eyebrow{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.9rem}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:400;line-height:1.12;margin-bottom:.6rem}
+h1 em{font-style:italic;color:var(--gold)}
+.header-meta{color:var(--muted);font-size:.88rem;margin-top:.8rem}
+
+/* ── SHELL ── */
+.shell{max-width:1260px;margin:0 auto;display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 200px)}
+
+/* ── SIDEBAR ── */
+.sidebar{border-right:1px solid var(--border);padding:2rem 1.2rem 4rem 1.5rem;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);font-weight:500;margin-bottom:.5rem;margin-top:1.4rem}
+.sb-label:first-child{margin-top:0}
+.sb-btn{display:block;width:100%;text-align:left;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:300;padding:.4rem .55rem;border-radius:4px;cursor:pointer;transition:all .12s;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-btn:hover{color:var(--text);background:var(--surf2)}
+.sb-btn.active{color:var(--gold);font-weight:500;background:var(--gold-bg)}
+.year-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.yr-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.72rem;padding:.25rem .6rem;border-radius:20px;cursor:pointer;transition:all .12s}
+.yr-btn:hover{border-color:var(--bord2);color:var(--text)}
+.yr-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+.sb-divider{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
+.seen-count{font-size:.72rem;color:var(--seen);margin-top:.4rem}
+
+/* ── CONTENT ── */
+.content{padding:2rem 2.5rem 5rem}
+
+/* fest header */
+.fest-head{padding-bottom:1.4rem;border-bottom:1px solid var(--border);margin-bottom:1.6rem}
+.fest-name{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:400;margin-bottom:.4rem}
+.tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:.4rem 0}
+.tag{font-size:.63rem;letter-spacing:.09em;text-transform:uppercase;padding:.18rem .55rem;border-radius:3px;font-weight:500}
+.tag-loc{background:var(--surf2);color:var(--muted)}
+.tag-award{background:var(--gold-bg);color:var(--gold)}
+.fest-desc{color:var(--muted);font-size:.87rem;max-width:620px;margin-top:.6rem;line-height:1.7}
+
+/* controls bar */
+.controls{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:1.4rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.year-pills{display:flex;gap:5px;flex-wrap:wrap}
+.year-pill{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.73rem;padding:.27rem .65rem;border-radius:20px;cursor:pointer;transition:all .12s}
+.year-pill:hover{border-color:var(--bord2);color:var(--text)}
+.year-pill.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+.ctrl-sep{width:1px;height:18px;background:var(--border)}
+.genre-sel{background:var(--surf2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.3rem .65rem;border-radius:4px;cursor:pointer;appearance:none;padding-right:1.6rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center}
+.hide-seen-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.73rem;padding:.27rem .7rem;border-radius:20px;cursor:pointer;transition:all .12s;white-space:nowrap}
+.hide-seen-btn:hover{border-color:var(--bord2);color:var(--text)}
+.hide-seen-btn.active{border-color:var(--seen-bord);color:var(--seen);background:var(--seen-bg)}
+
+/* legend */
+.legend{display:flex;gap:1.1rem;flex-wrap:wrap;margin-bottom:1.3rem;font-size:.7rem;color:var(--muted)}
+.leg-item{display:flex;align-items:center;gap:.35rem}
+.leg-dot{width:7px;height:7px;border-radius:1px}
+.ld-w{background:var(--gold)}
+.ld-r{background:var(--surf3);border:1px solid var(--bord2)}
+.ld-b{background:rgba(90,126,168,.45)}
+.ld-n{background:transparent;border:1px solid var(--dim)}
+
+/* section label */
+.sec-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:500;margin:1.4rem 0 .7rem;display:flex;align-items:center;gap:.5rem}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── FILM CARD ── */
+.film-card{border:1px solid var(--border);border-radius:6px;background:var(--surf);margin-bottom:6px;overflow:hidden;transition:border-color .13s;cursor:pointer}
+.film-card:hover{border-color:var(--bord2)}
+.film-card.winner{border-color:var(--gold-bord);background:var(--gold-bg)}
+.film-card.seen{background:var(--seen-bg)!important;border-color:var(--seen-bord)!important;opacity:.72}
+.film-card.hidden-seen{display:none}
+
+.card-head{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem}
+.card-icon{width:30px;height:30px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:500;flex-shrink:0}
+.ci-winner{background:var(--gold);color:#0e0e10}
+.ci-runner{background:var(--surf3);color:var(--muted)}
+.ci-buzz{background:rgba(90,126,168,.25);color:#7fa8cc}
+.ci-notable{background:var(--surf2);color:var(--dim)}
+
+.card-titles{flex:1;min-width:0}
+.card-title{font-family:'Playfair Display',serif;font-size:.97rem;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.film-card.winner .card-title{color:#e8d8a0}
+.film-card.seen .card-title{text-decoration:line-through;text-decoration-color:var(--seen);opacity:.7}
+.card-sub{font-size:.74rem;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.card-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.award-pill{font-size:.6rem;padding:.13rem .45rem;border-radius:20px;font-weight:500;white-space:nowrap}
+.pill-w{background:rgba(201,168,76,.2);color:var(--gold)}
+.pill-r{background:var(--surf3);color:var(--muted)}
+.pill-b{background:rgba(90,126,168,.15);color:#7fa8cc}
+.pill-n{background:transparent;color:var(--dim);border:1px solid var(--border)}
+.genre-badge{font-size:.58rem;padding:.1rem .4rem;border-radius:3px;background:var(--surf2);color:var(--dim);white-space:nowrap}
+.rating{font-size:.72rem;color:#6aaa70;font-weight:500;white-space:nowrap}
+.chevron{color:var(--dim);font-size:.65rem;transition:transform .18s}
+.film-card.expanded .chevron{transform:rotate(180deg)}
+
+/* watched checkbox */
+.seen-cb-wrap{display:flex;align-items:center;flex-shrink:0}
+.seen-cb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--dim);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .13s;flex-shrink:0}
+.seen-cb:hover{border-color:var(--seen)}
+.film-card.seen .seen-cb{background:var(--seen);border-color:var(--seen)}
+.seen-check{font-size:.6rem;color:#fff;display:none}
+.film-card.seen .seen-check{display:block}
+
+/* expanded detail */
+.card-detail{display:none;padding:0 1rem 1rem;border-top:1px solid var(--border)}
+.film-card.expanded .card-detail{display:block}
+.detail-desc{font-size:.83rem;color:var(--muted);line-height:1.72;padding-top:.8rem;margin-bottom:.8rem}
+.detail-row{display:flex;gap:.45rem;margin-bottom:.3rem;font-size:.76rem}
+.dk{color:var(--dim);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;min-width:72px;padding-top:1px}
+.dv{color:var(--muted)}
+.dv strong{color:var(--text);font-weight:400}
+
+/* empty */
+.empty-msg{color:var(--dim);font-size:.85rem;padding:1.5rem 0;text-align:center;font-style:italic}
+
+/* scrollbar */
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:2px}
+
+@media(max-width:720px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:1.5rem}
+  .content{padding:1.5rem}
+  h1{font-size:2rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <p class="eyebrow">Cinema Guide · 2020 — 2025</p>
+  <h1>Indie & Arthouse<br><em>Film Festivals</em></h1>
+  <p class="header-meta">Cannes · Venice · Berlinale · Sundance · Kino Pavasaris — six years of winners, contenders & notable films. Click any film for details. Check off what you've seen.</p>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content" id="content"></main>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────
+const DATA = {
+cannes:{name:"Cannes Film Festival",loc:"France · May",award:"Palme d'Or",
+desc:"The world's most prestigious film festival, held since 1946 on the French Riviera. Its Palme d'Or is the summit of international arthouse cinema. Note: the 2020 festival was cancelled due to COVID-19; films were announced as an honorary selection.",
+years:{
+2025:[
+{t:"It Was Just an Accident",d:"Jafar Panahi",c:"Iran",s:"winner",a:"Palme d'Or",r:"7.3",g:"Thriller",rt:"105 min",desc:"An unassuming mechanic recognises his old prison torturer on the street. The exiled Iranian master's return to competition — tense, elliptical, extraordinary."},
+{t:"Sentimental Value",d:"Joachim Trier",c:"Norway",s:"runner",a:"Grand Prix",r:"7.6",g:"Drama",rt:"118 min",desc:"An intimate exploration of family and memory starring Renate Reinsve and Stellan Skarsgård. Trier's follow-up to The Worst Person in the World."},
+{t:"Sirât",d:"Oliver Laxe",c:"Spain",s:"runner",a:"Jury Prize",r:"7.1",g:"Drama",rt:"120 min",desc:"Laxe's hypnotic survivalist epic set against the Moroccan desert — formally audacious and deeply divisive at the Croisette."},
+{t:"Sound of Falling",d:"Mascha Schilinski",c:"Germany",s:"runner",a:"Best Director",r:"7.2",g:"Drama",rt:"124 min",desc:"A haunting generational portrait of women on a German farm across different eras. Schilinski's debut drew comparisons to Terrence Malick."},
+{t:"Die My Love",d:"Lynne Ramsay",c:"USA/UK",s:"notable",a:"In Competition",r:"7.0",g:"Drama",rt:"112 min",desc:"Ramsay's long-awaited return — a devastating study of postpartum psychosis with Jennifer Lawrence. Raw, uncompromising, polarising."},
+{t:"The Phoenician Scheme",d:"Wes Anderson",c:"USA",s:"notable",a:"In Competition",r:"6.8",g:"Comedy",rt:"101 min",desc:"Anderson's latest ensemble puzzle starring Benicio Del Toro and Michael Cera in a caper involving a dysfunctional business empire."},
+{t:"Nouvelle Vague",d:"Richard Linklater",c:"USA",s:"notable",a:"In Competition",r:"6.7",g:"Drama",rt:"130 min",desc:"Linklater's French-language film about the making of Godard's Breathless, starring Zooey Deutch. A love letter to cinema shot in Paris."},
+{t:"Young Mothers",d:"Jean-Pierre & Luc Dardenne",c:"Belgium",s:"notable",a:"In Competition",r:"7.4",g:"Drama",rt:"93 min",desc:"The Dardenne brothers return to Liège with this tender study of five young mothers in a shelter. Among the most warmly reviewed Competition entries."},
+{t:"Alpha",d:"Julia Ducournau",c:"France",s:"buzz",a:"In Competition",r:"6.4",g:"Horror",rt:"107 min",desc:"The Palme d'Or winner of Titane returned — a coming-of-age body-horror hybrid. Divisive: some found it a step back, others a bold new direction."},
+{t:"Eddington",d:"Ari Aster",c:"USA",s:"buzz",a:"In Competition",r:"6.2",g:"Dark Comedy",rt:"148 min",desc:"Aster's first time in Competition — a pandemic-era Western with Joaquin Phoenix as a small-town sheriff vs. Pedro Pascal as his mayor."},
+{t:"The Mastermind",d:"Kelly Reichardt",c:"USA",s:"buzz",a:"In Competition",r:"7.0",g:"Crime",rt:"110 min",desc:"Reichardt's art-heist drama set against the Vietnam War, starring Josh O'Connor. Her second Competition entry after Showing Up (2022)."},
+],
+2024:[
+{t:"Anora",d:"Sean Baker",c:"USA",s:"winner",a:"Palme d'Or",r:"7.8",g:"Comedy",rt:"139 min",desc:"A scrappy New York sex worker impulsively marries the son of a Russian oligarch — then the parents arrive. Baker's most crowd-pleasing film and the most joyful Palme d'Or in years."},
+{t:"All We Imagine as Light",d:"Payal Kapadia",c:"India",s:"runner",a:"Grand Prix",r:"7.8",g:"Drama",rt:"118 min",desc:"An intimate, poetic portrait of three women navigating love and longing in Mumbai. The first Indian film in Competition in 30 years."},
+{t:"Emilia Pérez",d:"Jacques Audiard",c:"France/Mexico",s:"runner",a:"Jury Prize",r:"6.7",g:"Musical",rt:"130 min",desc:"A wildly ambitious narco-musical about a cartel boss who transitions to live as a woman. Record Oscar nominations. Love it or hate it."},
+{t:"The Seed of the Sacred Fig",d:"Mohammad Rasoulof",c:"Iran/Germany",s:"runner",a:"Special Prize",r:"7.9",g:"Thriller",rt:"168 min",desc:"An Iranian judge becomes paranoid his family supports the uprising. Rasoulof fled Iran to attend the premiere. One of the year's bravest films."},
+{t:"Grand Tour",d:"Miguel Gomes",c:"Portugal",s:"runner",a:"Best Director",r:"7.2",g:"Drama",rt:"128 min",desc:"A gloriously playful journey across 1917 Asia — mixing archival footage, narrative fiction and musical sequences. Beautifully strange."},
+{t:"The Substance",d:"Coralie Fargeat",c:"France/UK",s:"runner",a:"Best Screenplay",r:"7.3",g:"Horror",rt:"140 min",desc:"Body-horror satire with Demi Moore as a fading TV star who takes a drug generating a 'better version' (Margaret Qualley). Cannes's most viscerally entertaining film."},
+{t:"The Apprentice",d:"Ali Abbasi",c:"Denmark/Canada",s:"notable",a:"In Competition",r:"7.3",g:"Biopic",rt:"122 min",desc:"The young Donald Trump (Sebastian Stan) under Roy Cohn's mentorship (Jeremy Strong). Surprisingly nuanced and dramatically effective."},
+{t:"Bird",d:"Andrea Arnold",c:"UK",s:"notable",a:"In Competition",r:"7.1",g:"Drama",rt:"119 min",desc:"Arnold's return to form — a tenderly observed portrait of a 12-year-old girl in a chaotic Kent household, with Barry Keoghan and Franz Rogowski."},
+{t:"Kinds of Kindness",d:"Yorgos Lanthimos",c:"USA/UK",s:"notable",a:"In Competition",r:"7.0",g:"Dark Comedy",rt:"164 min",desc:"A triptych of darkly comic fables starring Emma Stone, Jesse Plemons, and Willem Dafoe. Lanthimos at his most deliberately alienating."},
+{t:"Flow",d:"Gints Zilbalodis",c:"Latvia",s:"buzz",a:"Un Certain Regard Award",r:"8.2",g:"Animation",rt:"84 min",desc:"A wordless animated film about a cat navigating a flooded world. One of the year's most beloved films — went on to win the Oscar for Best Animated Feature."},
+{t:"Megalopolis",d:"Francis Ford Coppola",c:"USA",s:"buzz",a:"In Competition",r:"5.6",g:"Sci-Fi",rt:"138 min",desc:"Coppola's self-financed passion project decades in the making — a Roman sci-fi epic. Divisive beyond all expectation, impossible to dismiss."},
+],
+2023:[
+{t:"Anatomy of a Fall",d:"Justine Triet",c:"France",s:"winner",a:"Palme d'Or",r:"7.8",g:"Thriller",rt:"152 min",desc:"A woman on trial for her husband's death. Sandra Hüller delivers a career-defining performance. Triet becomes only the third female director to win the Palme."},
+{t:"The Zone of Interest",d:"Jonathan Glazer",c:"UK/Poland",s:"runner",a:"Grand Prix",r:"7.4",g:"Drama",rt:"105 min",desc:"A Nazi commandant's family lives pleasantly beside Auschwitz — horror rendered through radical mundanity. Won BAFTA and Oscar for Best International Film."},
+{t:"Fallen Leaves",d:"Aki Kaurismäki",c:"Finland",s:"runner",a:"Jury Prize",r:"7.5",g:"Romance",rt:"81 min",desc:"The Finnish master's gentle, deadpan love story between two lonely Helsinki workers. Warm, funny, heartbreaking in the best way."},
+{t:"Monster",d:"Hirokazu Kore-eda",c:"Japan",s:"runner",a:"Best Director",r:"7.9",g:"Drama",rt:"126 min",desc:"A schoolboy's change in behaviour told from three shifting perspectives. Keeps folding in on itself to reveal something quietly devastating."},
+{t:"Killers of the Flower Moon",d:"Martin Scorsese",c:"USA",s:"notable",a:"Out of Competition",r:"7.6",g:"Historical",rt:"206 min",desc:"Scorsese's 3.5-hour epic about the systematic murder of the Osage Nation with DiCaprio and Lily Gladstone. Dominated awards season."},
+{t:"May December",d:"Todd Haynes",c:"USA",s:"notable",a:"Un Certain Regard",r:"7.0",g:"Drama",rt:"117 min",desc:"Natalie Portman prepares to play Julianne Moore's character in a film about a tabloid scandal. A dazzling double portrait of obsession and complicity."},
+{t:"Past Lives",d:"Celine Song",c:"USA/South Korea",s:"buzz",a:"Directors' Fortnight",r:"7.9",g:"Romance",rt:"106 min",desc:"Two childhood sweethearts reconnect across continents and decades. Song's debut was among the most emotionally affecting films of the year."},
+{t:"Passages",d:"Ira Sachs",c:"France/Germany",s:"buzz",a:"Directors' Fortnight",r:"6.8",g:"Drama",rt:"91 min",desc:"Franz Rogowski as a filmmaker tearing apart his marriage and a new relationship with equal recklessness. Intimate, uncomfortable, excellent."},
+{t:"EO",d:"Jerzy Skolimowski",c:"Poland/Italy",s:"notable",a:"In Competition (2022 carry)",r:"7.0",g:"Drama",rt:"86 min",desc:"A donkey's journey across contemporary Europe — a Bressonian fable of great beauty and unexpected emotion."},
+],
+2022:[
+{t:"Triangle of Sadness",d:"Ruben Östlund",c:"Sweden",s:"winner",a:"Palme d'Or",r:"7.3",g:"Dark Comedy",rt:"147 min",desc:"A yacht full of models, millionaires, and influencers sinks — forcing survivors to rebuild a desert-island hierarchy where beauty is the only currency. Scabrous, hilarious satire."},
+{t:"Stars at Noon",d:"Claire Denis",c:"France",s:"runner",a:"Grand Prix (shared)",r:"6.2",g:"Romance",rt:"136 min",desc:"Margaret Qualley and Joe Alwyn in Nicaragua — a stranger-in-a-strange-land love story that's also a paranoid thriller. Denis at her most sensual."},
+{t:"Close",d:"Lukas Dhont",c:"Belgium",s:"runner",a:"Grand Prix (shared)",r:"7.5",g:"Drama",rt:"105 min",desc:"The intense friendship between two thirteen-year-old boys disrupted by social pressure. A devastating, deeply humane debut from Dhont."},
+{t:"Decision to Leave",d:"Park Chan-wook",c:"South Korea",s:"runner",a:"Best Director",r:"7.7",g:"Crime",rt:"138 min",desc:"A detective becomes obsessed with the prime suspect in a murder — his dead client's wife. Park's most formally intricate and romantically charged film."},
+{t:"The Worst Person in the World",d:"Joachim Trier",c:"Norway",s:"notable",a:"Un Certain Regard (2021)",r:"8.0",g:"Romance",rt:"128 min",desc:"A woman's search for love and purpose across four years of Oslo life. Renate Reinsve won Best Actress at Cannes 2021. Widely considered one of the decade's best."},
+{t:"Broker",d:"Hirokazu Kore-eda",c:"South Korea",s:"notable",a:"In Competition",r:"7.5",g:"Drama",rt:"129 min",desc:"A found-family road movie about people who profit from a baby drop-box. Song Kang-ho won Best Actor. Kore-eda's Korean-language debut."},
+{t:"Crimes of the Future",d:"David Cronenberg",c:"Canada",s:"notable",a:"In Competition",r:"6.7",g:"Sci-Fi",rt:"107 min",desc:"Cronenberg's long-awaited return to body horror — Viggo Mortensen performs surgery as art in a not-so-distant future where pain is pleasure."},
+{t:"EO",d:"Jerzy Skolimowski",c:"Poland/Italy",s:"buzz",a:"Jury Prize",r:"7.0",g:"Drama",rt:"86 min",desc:"A donkey's journey across Europe — a Bressonian fable. Winning the Jury Prize was one of Cannes 2022's great surprises."},
+],
+2021:[
+{t:"Titane",d:"Julia Ducournau",c:"France",s:"winner",a:"Palme d'Or",r:"6.9",g:"Horror",rt:"108 min",desc:"A car-show dancer with a titanium skull plate who becomes pregnant by a car and disguises herself as a missing boy. Radical body horror that made Ducournau the second female Palme d'Or winner."},
+{t:"A Hero",d:"Asghar Farhadi",c:"Iran",s:"runner",a:"Grand Prix (shared)",r:"7.2",g:"Drama",rt:"127 min",desc:"A prisoner on leave tries to convert found gold coins to repay his debt — but his good deed spirals out of control. Farhadi's moral puzzle-making at its sharpest."},
+{t:"Compartment No. 6",d:"Juho Kuosmanen",c:"Finland",s:"runner",a:"Grand Prix (shared)",r:"7.3",g:"Romance",rt:"107 min",desc:"Two strangers share a train compartment to the Arctic Circle — a slow-burn love story of radiant gentleness."},
+{t:"Annette",d:"Leos Carax",c:"France/USA",s:"runner",a:"Best Director",r:"6.7",g:"Musical",rt:"140 min",desc:"Adam Driver and Marion Cotillard in a rock-opera about a comedian and his opera-singer wife whose clashing fame creates tragedy. Carax's most ambitious film."},
+{t:"Drive My Car",d:"Ryusuke Hamaguchi",c:"Japan",s:"runner",a:"Best Screenplay",r:"7.9",g:"Drama",rt:"179 min",desc:"A theatre director adapts Chekhov's Uncle Vanya while processing grief over his wife. Won Best Screenplay at Cannes, Best International Film at the Oscars. A modern masterpiece."},
+{t:"The Worst Person in the World",d:"Joachim Trier",c:"Norway",s:"runner",a:"Best Actress (Reinsve)",r:"8.0",g:"Romance",rt:"128 min",desc:"A woman navigates love, career, and identity in contemporary Oslo. Renate Reinsve won Best Actress. Became one of the year's most beloved films globally."},
+{t:"Memoria",d:"Apichatpong Weerasethakul",c:"Colombia/Thailand",s:"notable",a:"Jury Prize",r:"6.9",g:"Art Cinema",rt:"136 min",desc:"A woman in Bogotá hears a mysterious boom that no one else can. Weerasethakul's most formally radical film — a 136-minute trance of sensory cinema."},
+{t:"Benedetta",d:"Paul Verhoeven",c:"France",s:"notable",a:"Un Certain Regard",r:"6.9",g:"Historical",rt:"131 min",desc:"A 17th-century Italian abbess whose mystical visions and lesbian affair bring her before an inquisitor. Verhoeven in full provocateur mode."},
+{t:"Red Rocket",d:"Sean Baker",c:"USA",s:"notable",a:"In Competition",r:"7.0",g:"Drama",rt:"130 min",desc:"A washed-up porn star returns to his Texas hometown and falls for a 17-year-old. Baker's warmest and most effortlessly observed film."},
+],
+2020:[
+{t:"(Festival cancelled — COVID-19)",d:"",c:"",s:"notable",a:"No awards",r:"",g:"",rt:"",desc:"The 73rd Cannes Film Festival was cancelled due to the pandemic. A special selection was announced and many films later screened at festivals worldwide."},
+{t:"Nomadland",d:"Chloé Zhao",c:"USA",s:"buzz",a:"Would-be contender",r:"7.3",g:"Drama",rt:"108 min",desc:"Zhao's film about a woman living as a modern-day nomad across the American West premiered at Venice and Toronto in 2020. Won the Oscar for Best Picture."},
+{t:"Promising Young Woman",d:"Emerald Fennell",c:"UK",s:"buzz",a:"Would-be contender",r:"7.2",g:"Thriller",rt:"113 min",desc:"A dark revenge thriller about sexual violence culture on college campuses — sharp, stylised, and divisive. Won the Oscar for Original Screenplay."},
+]
+}},
+venice:{name:"Venice International Film Festival",loc:"Italy · Aug–Sep",award:"Golden Lion",
+desc:"The world's oldest film festival, founded 1932. A consistent launching pad for Oscar contenders and bold international cinema. The Golden Lion is its top honour.",
+years:{
+2025:[
+{t:"Father Mother Sister Brother",d:"Jim Jarmusch",c:"USA",s:"winner",a:"Golden Lion",r:"6.8",g:"Drama",rt:"124 min",desc:"An anthology of family stories featuring Cate Blanchett, Adam Driver, Charlotte Rampling and Vicky Krieps. Jury presided by Alexander Payne."},
+{t:"The Voice of Hind Rajab",d:"Kaouther Ben Hania",c:"Tunisia/Belgium",s:"runner",a:"Silver Lion Grand Jury",r:"8.1",g:"Documentary",rt:"98 min",desc:"A devastating documentary about 6-year-old Palestinian girl Hind Rajab, killed in Gaza. Ben Hania's acceptance speech moved the festival to tears."},
+{t:"The Smashing Machine",d:"Benny Safdie",c:"USA",s:"runner",a:"Silver Lion Best Director",r:"7.6",g:"Biopic",rt:"145 min",desc:"Safdie's first solo directorial feature — a biopic of MMA fighter Mark Kerr with Dwayne Johnson. Returns to the kinetic energy of Uncut Gems."},
+{t:"No Other Choice",d:"Park Chan-wook",c:"South Korea",s:"buzz",a:"In Competition (no prize)",r:"8.2",g:"Thriller",rt:"138 min",desc:"One of the festival's most acclaimed films that won nothing. Jury president Payne admitted this 'broke their hearts.' Represents Korea at the Oscars."},
+{t:"April",d:"Dea Kulumbegashvili",c:"Georgia/France",s:"runner",a:"Special Jury Prize",r:"7.1",g:"Drama",rt:"130 min",desc:"An ob-gyn in rural Georgia who provides illegal abortions. Long, unblinking takes create unbearable tension. Went on to win Kino Pavasaris 2025."},
+{t:"Dog 51",d:"Various",c:"International",s:"notable",a:"Closing Film",r:"—",g:"Drama",rt:"—",desc:"The festival's closing film out of competition."},
+],
+2024:[
+{t:"The Room Next Door",d:"Pedro Almodóvar",c:"Spain",s:"winner",a:"Golden Lion",r:"7.0",g:"Drama",rt:"107 min",desc:"Almodóvar's first English-language feature. Julianne Moore and Tilda Swinton as estranged friends reunited by terminal illness. Elegant, unmistakably Almodóvar."},
+{t:"Vermiglio",d:"Maura Delpero",c:"Italy",s:"runner",a:"Silver Lion Grand Jury",r:"7.5",g:"Historical",rt:"119 min",desc:"A portrait of a mountain village in northern Italy during WWII's final winter. Delpero's second film announced a major new voice in Italian cinema."},
+{t:"The Brutalist",d:"Brady Corbet",c:"USA/UK",s:"runner",a:"Silver Lion Best Director",r:"7.6",g:"Drama",rt:"215 min",desc:"A sweeping 3.5-hour epic about a Hungarian-Jewish architect who emigrates to America. One of the year's most ambitious films — multiple Oscar wins."},
+{t:"April",d:"Dea Kulumbegashvili",c:"Georgia",s:"runner",a:"Special Jury Prize",r:"7.1",g:"Drama",rt:"130 min",desc:"An ob-gyn in rural Georgia who risks herself for her patients. Long formal takes create excruciating tension."},
+{t:"Queer",d:"Luca Guadagnino",c:"Italy/USA",s:"notable",a:"In Competition",r:"7.1",g:"Romance",rt:"137 min",desc:"Guadagnino adapts William S. Burroughs — Daniel Craig as an expat in 1950s Mexico City consumed by obsession. Formally distinctive and emotionally surprising."},
+{t:"Maria",d:"Pablo Larraín",c:"Chile/Germany",s:"notable",a:"In Competition",r:"6.8",g:"Biopic",rt:"124 min",desc:"Angelina Jolie as Maria Callas in her final days. Larraín completes his trilogy of iconic women (Spencer, Jackie) with this study of art and mortality."},
+{t:"Joker: Folie à Deux",d:"Todd Phillips",c:"USA",s:"buzz",a:"In Competition",r:"5.4",g:"Musical",rt:"138 min",desc:"The much-anticipated musical sequel with Joaquin Phoenix and Lady Gaga. Premiered to mixed-to-negative reviews and subsequently flopped at the box office."},
+],
+2023:[
+{t:"Poor Things",d:"Yorgos Lanthimos",c:"UK/Ireland",s:"winner",a:"Golden Lion",r:"7.9",g:"Dark Comedy",rt:"141 min",desc:"Emma Stone as Bella Baxter — brought back to life with a child's brain and proceeding to grow up at astonishing speed. A darkly comic feminist fable that swept awards season."},
+{t:"Ferrari",d:"Michael Mann",c:"USA/Italy",s:"runner",a:"Silver Lion Grand Jury",r:"7.0",g:"Biopic",rt:"130 min",desc:"Adam Driver as Enzo Ferrari in the pivotal 1957 summer. Mann's craft is as sharp as ever — about speed, death, marriage, and obsession."},
+{t:"Me Captain",d:"Matteo Garrone",c:"Italy/Belgium",s:"runner",a:"Silver Lion Best Director",r:"7.5",g:"Drama",rt:"121 min",desc:"Two Senegalese cousins attempt the desperate crossing to Europe. Garrone's most humane film — Italy's Oscar submission."},
+{t:"Priscilla",d:"Sofia Coppola",c:"USA",s:"notable",a:"Best Actress (Spaeny)",r:"6.8",g:"Biopic",rt:"113 min",desc:"Coppola's intimate portrait of Priscilla Presley inside Graceland — a story of suffocating domesticity from the woman's perspective."},
+{t:"El Conde",d:"Pablo Larraín",c:"Chile",s:"notable",a:"Best Screenplay",r:"7.3",g:"Dark Comedy",rt:"110 min",desc:"A wickedly funny black-and-white fantasy in which Pinochet turns out to be a vampire, still living in Patagonia. Larraín at his most playful."},
+{t:"Origin",d:"Ava DuVernay",c:"USA",s:"notable",a:"In Competition",r:"7.0",g:"Drama",rt:"141 min",desc:"DuVernay adapts Isabel Wilkerson's Caste — a bold film that interweaves the author's personal story with explorations of three global caste systems."},
+],
+2022:[
+{t:"All the Beauty and the Bloodshed",d:"Laura Poitras",c:"USA",s:"winner",a:"Golden Lion",r:"8.1",g:"Documentary",rt:"117 min",desc:"A portrait of photographer and activist Nan Goldin and her campaign against the Sackler family. One of the great American documentaries of the decade."},
+{t:"Saint Omer",d:"Alice Diop",c:"France",s:"runner",a:"Grand Jury Prize",r:"7.3",g:"Drama",rt:"122 min",desc:"A novelist attends the trial of a Senegalese woman accused of killing her toddler. Diop's formally bold courtroom drama was one of the year's most acclaimed films."},
+{t:"Bones and All",d:"Luca Guadagnino",c:"USA",s:"runner",a:"Silver Lion Best Director",r:"7.5",g:"Romance",rt:"130 min",desc:"A road movie about young cannibals in 1980s America — Timothée Chalamet and Taylor Russell in Guadagnino's most emotionally devastating film."},
+{t:"No Bears",d:"Jafar Panahi",c:"Iran",s:"runner",a:"Special Jury Prize",r:"7.5",g:"Drama",rt:"107 min",desc:"Panahi directing a film from within Iran while himself under house arrest — a film about censorship, borders, and artistic freedom that is also a genuine thriller."},
+{t:"The Banshees of Inisherin",d:"Martin McDonagh",c:"Ireland/UK",s:"runner",a:"Best Screenplay",r:"7.7",g:"Dark Comedy",rt:"114 min",desc:"Two lifelong friends on a remote Irish island have a falling-out. Colin Farrell and Brendan Gleeson in McDonagh's bleakest, most allegorical film."},
+{t:"Tár",d:"Todd Field",c:"USA",s:"notable",a:"Best Actress (Blanchett)",r:"7.5",g:"Drama",rt:"158 min",desc:"Cate Blanchett as Lydia Tár, a fictional conductor brought down by a #MeToo scandal. One of the great screen performances — best actress at both Venice and the Oscars."},
+{t:"White Noise",d:"Noah Baumbach",c:"USA",s:"notable",a:"Opening Film",r:"6.5",g:"Dark Comedy",rt:"136 min",desc:"Baumbach adapts Don DeLillo's novel — a satirical portrait of an American family confronting death, consumerism and an 'airborne toxic event.'"},
+],
+2021:[
+{t:"Happening",d:"Audrey Diwan",c:"France",s:"winner",a:"Golden Lion",r:"7.5",g:"Drama",rt:"100 min",desc:"A 1960s French student seeks an illegal abortion. Diwan's formally precise film is both harrowing and deeply humane — became essential viewing after Roe v. Wade."},
+{t:"The Lost Daughter",d:"Maggie Gyllenhaal",c:"USA/Greece",s:"runner",a:"Best Screenplay",r:"6.8",g:"Thriller",rt:"121 min",desc:"Olivia Colman as a professor on a Greek island, haunted by memories of her own early motherhood. Gyllenhaal's debut is taut, unsettling, and complex."},
+{t:"Spencer",d:"Pablo Larraín",c:"Chile/Germany",s:"notable",a:"In Competition",r:"7.0",g:"Biopic",rt:"111 min",desc:"Kristen Stewart as Princess Diana over one Christmas weekend at Sandringham, unravelling. One of the great screen performances — Stewart won Best Actress at several guilds."},
+{t:"The Power of the Dog",d:"Jane Campion",c:"New Zealand",s:"buzz",a:"Out of Competition",r:"6.9",g:"Western",rt:"126 min",desc:"Campion's first film in 12 years — a psychological Western with Benedict Cumberbatch as a rancher who torments his brother's new wife. Won the Oscar for Best Director."},
+{t:"Parallel Mothers",d:"Pedro Almodóvar",c:"Spain",s:"notable",a:"Opening Film",r:"7.0",g:"Drama",rt:"123 min",desc:"Two women who give birth on the same day are linked across time. Penélope Cruz won the Volpi Cup. A rich, deeply felt Almodóvar."},
+],
+2020:[
+{t:"Nomadland",d:"Chloé Zhao",c:"USA",s:"winner",a:"Golden Lion",r:"7.3",g:"Drama",rt:"108 min",desc:"A woman in her sixties takes to the road as a modern-day nomad after the collapse of her town. Zhao's documentary-inflected approach achieved something rare — a mainstream film of profound stillness. Won the Oscar for Best Picture."},
+{t:"Pieces of a Woman",d:"Kornél Mundruczó",c:"Canada/Hungary",s:"runner",a:"Volpi Cup (Best Actress)",r:"6.9",g:"Drama",rt:"126 min",desc:"The aftermath of a home birth gone wrong — Vanessa Kirby's performance is astonishing. A film of unbearable emotional precision."},
+{t:"The Father",d:"Florian Zeller",c:"UK/France",s:"notable",a:"In Competition",r:"8.1",g:"Drama",rt:"97 min",desc:"Anthony Hopkins as a man with dementia — the film places us inside his fractured perception. Hopkins won the Oscar for Best Actor. One of the year's most innovative films."},
+{t:"Ammonite",d:"Francis Lee",c:"UK",s:"notable",a:"In Competition",r:"6.3",g:"Romance",rt:"120 min",desc:"Kate Winslet and Saoirse Ronan in a period drama about fossil hunter Mary Anning. Lee's follow-up to God's Own Country."},
+]}},
+berlin:{name:"Berlin International Film Festival",loc:"Germany · February",award:"Golden Bear",
+desc:"One of the 'Big Three' European festivals, with a reputation for politically engaged, socially committed cinema. The Berlinale is the most overtly political of the trio.",
+years:{
+2025:[
+{t:"Dreams (Sex Love)",d:"Dag Johan Haugerud",c:"Norway",s:"winner",a:"Golden Bear",r:"6.8",g:"Drama",rt:"118 min",desc:"The second in Haugerud's trilogy exploring love, identity and desire. Jury presided by Todd Haynes."},
+{t:"The Blue Trail",d:"Gabriel Mascaro",c:"Brazil",s:"runner",a:"Silver Bear Grand Jury",r:"7.2",g:"Sci-Fi",rt:"108 min",desc:"Mascaro's speculative fiction about a climate-changed Brazil — visually striking and politically urgent."},
+{t:"Living the Land",d:"Huo Meng",c:"China",s:"runner",a:"Silver Bear Best Director",r:"7.0",g:"Drama",rt:"115 min",desc:"A quiet, formally rigorous Chinese film about rural life and displacement."},
+{t:"If I Had Legs I'd Kick You",d:"Mary Bronstein",c:"USA",s:"runner",a:"Silver Bear Best Lead (Rose Byrne)",r:"7.1",g:"Drama",rt:"104 min",desc:"Rose Byrne as a mother in psychodrama crisis. One of the great screen performances — Byrne's finest work."},
+{t:"Kontinental '25",d:"Radu Jude",c:"Romania",s:"notable",a:"Silver Bear Screenplay",r:"7.3",g:"Art Cinema",rt:"100 min",desc:"The 2021 Golden Bear winner's latest essay-film collage applied to contemporary Romanian politics."},
+{t:"Blue Moon",d:"Richard Linklater",c:"USA",s:"notable",a:"In Competition",r:"7.0",g:"Drama",rt:"88 min",desc:"A chamber piece imagining the last night between Lorenz Hart and Richard Rodgers — Andrew Scott won the Silver Bear for Best Supporting Performance."},
+],
+2024:[
+{t:"Dahomey",d:"Mati Diop",c:"France/Senegal/Benin",s:"winner",a:"Golden Bear",r:"6.8",g:"Documentary",rt:"68 min",desc:"26 looted treasures from the Kingdom of Dahomey are returned to Benin — and Diop gives them voice. Second consecutive documentary to win the Golden Bear. Jury presided by Lupita Nyong'o."},
+{t:"A Traveler's Needs",d:"Hong Sangsoo",c:"South Korea",s:"runner",a:"Silver Bear Grand Jury",r:"7.2",g:"Drama",rt:"89 min",desc:"Isabelle Huppert as a foreigner teaching French in Korea through an unusual method. Hong's typically elliptical, wine-soaked world at its most charming."},
+{t:"No Other Land",d:"Basel Adra et al.",c:"Palestine/Norway",s:"notable",a:"Best Documentary",r:"8.5",g:"Documentary",rt:"95 min",desc:"A Palestinian collective's searing documentation of Israel's demolition of their West Bank village. Won the documentary prize amid political controversy."},
+{t:"A Different Man",d:"Aaron Schimberg",c:"USA",s:"notable",a:"Silver Bear Best Lead (Sebastian Stan)",r:"7.5",g:"Dark Comedy",rt:"112 min",desc:"A man with a facial difference undergoes a radical transformation — a wickedly smart film about identity and the stories we tell about ourselves."},
+{t:"The Devil's Bath",d:"Veronika Franz & Severin Fiala",c:"Austria",s:"notable",a:"In Competition",r:"7.3",g:"Horror",rt:"121 min",desc:"A period horror-drama set in 18th-century rural Austria about a woman driven to desperate measures. Relentlessly grim and impeccably crafted."},
+],
+2023:[
+{t:"On the Adamant",d:"Nicolas Philibert",c:"France",s:"winner",a:"Golden Bear",r:"7.2",g:"Documentary",rt:"109 min",desc:"A documentary aboard a floating day centre on the Seine for adults with mental illness. Philibert's humanist observational cinema at full strength. Jury presided by Kristen Stewart."},
+{t:"Tár",d:"Todd Field",c:"USA",s:"runner",a:"Silver Bear Grand Jury",r:"7.5",g:"Drama",rt:"158 min",desc:"Cate Blanchett as Lydia Tár, a fictional conductor brought down by a #MeToo scandal. A film of exceptional craft and one of the great performances."},
+{t:"Afire",d:"Christian Petzold",c:"Germany",s:"runner",a:"Silver Bear Jury Prize",r:"7.2",g:"Drama",rt:"102 min",desc:"A group of friends on a Baltic coast holiday as wildfires approach. Petzold's most sensory and emotionally surprising film in years."},
+{t:"20,000 Species of Bees",d:"Estibaliz Urresola Solaguren",c:"Spain",s:"notable",a:"Silver Bear Best Lead (Sofia Otero)",r:"7.4",g:"Drama",rt:"125 min",desc:"An 8-year-old trans child spends a summer with relatives in the Basque Country. Tender, precise, anchored by an extraordinary young performance."},
+{t:"Past Lives",d:"Celine Song",c:"USA/South Korea",s:"buzz",a:"Berlinale Special",r:"7.9",g:"Romance",rt:"106 min",desc:"Song's debut premiered here before its Sundance success. Two childhood sweethearts reconnect after years apart — quietly devastating."},
+],
+2022:[
+{t:"Alcarràs",d:"Carla Simón",c:"Spain",s:"winner",a:"Golden Bear",r:"7.4",g:"Drama",rt:"120 min",desc:"A family of Catalan peach farmers faces their last summer harvest before eviction by property developers. Simón's neo-realist portrait is tender, detailed, and heartbreaking."},
+{t:"The Novelist's Film",d:"Hong Sangsoo",c:"South Korea",s:"runner",a:"Silver Bear Grand Jury",r:"7.0",g:"Drama",rt:"92 min",desc:"Hong's black-and-white drama follows a novelist who encounters a former actress. Minimalist, funny, and touching in equal measure."},
+{t:"Both Sides of the Blade",d:"Claire Denis",c:"France",s:"runner",a:"Silver Bear Best Director",r:"6.7",g:"Romance",rt:"116 min",desc:"A couple's relationship is destabilised by the reappearance of her ex — Juliette Binoche and Vincent Lindon in a Denis love-triangle with real heat."},
+{t:"Rabiye Kurnaz vs. George W. Bush",d:"Andreas Dresen",c:"Germany",s:"runner",a:"Silver Bear Best Lead",r:"7.2",g:"Drama",rt:"119 min",desc:"A German-Turkish mother's years-long campaign to free her innocent son from Guantanamo Bay. Meltem Kaptan's performance is extraordinary."},
+],
+2021:[
+{t:"Bad Luck Banging or Loony Porn",d:"Radu Jude",c:"Romania",s:"winner",a:"Golden Bear",r:"7.2",g:"Art Cinema",rt:"106 min",desc:"A teacher's sex tape leaks online and a school committee meets to decide her fate — but the film is really a diagnosis of Romanian society. Formally wild, politically ferocious."},
+{t:"Wheel of Fortune and Fantasy",d:"Ryusuke Hamaguchi",c:"Japan",s:"runner",a:"Silver Bear Grand Jury",r:"7.7",g:"Drama",rt:"121 min",desc:"Three novellas about coincidences, chance encounters, and the contingency of desire. Hamaguchi's exquisite triptych — formally perfect."},
+{t:"I Never Cry",d:"Piotr Domalewski",c:"Poland",s:"notable",a:"Panorama",r:"7.2",g:"Drama",rt:"101 min",desc:"A teenage Polish girl travels to Ireland to collect her father's body after an accident — a road movie of quiet devastation."},
+],
+2020:[
+{t:"There Is No Evil",d:"Mohammad Rasoulof",c:"Iran",s:"winner",a:"Golden Bear",r:"7.9",g:"Drama",rt:"150 min",desc:"Four stories about Iranians who must choose whether to participate in the state's execution machine. Rasoulof directed while under travel ban — the Golden Bear was accepted in absentia."},
+{t:"Never Rarely Sometimes Always",d:"Eliza Hittman",c:"USA",s:"runner",a:"Silver Bear Grand Jury",r:"7.4",g:"Drama",rt:"101 min",desc:"A 17-year-old in rural Pennsylvania seeks an abortion and travels to New York. Hittman's ultra-naturalistic, deeply empathetic portrait of a teenager in crisis."},
+{t:"Undine",d:"Christian Petzold",c:"Germany",s:"notable",a:"Silver Bear Best Actress",r:"7.2",g:"Romance",rt:"91 min",desc:"A woman who tells her ex she will kill him if he leaves her — and then falls in love with a diver. Petzold's most quietly magical film."},
+{t:"DAU. Natasha",d:"Ilya Khrzhanovsky",c:"Germany/Ukraine",s:"notable",a:"Silver Bear Special Jury",r:"6.8",g:"Art Cinema",rt:"139 min",desc:"Part of the vast, controversial DAU project — a canteen worker at a Soviet research institute in the 1950s. Shot over years in a totalitarian simulacrum."},
+]}},
+sundance:{name:"Sundance Film Festival",loc:"USA · January",award:"Grand Jury Prize",
+desc:"The leading platform for American independent cinema. Sundance has launched more careers than any other US festival. Note: 2021 and 2022 editions were held virtually due to COVID-19.",
+years:{
+2025:[
+{t:"Atropia",d:"Hailey Gates",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"6.5",g:"Satire",rt:"105 min",desc:"Set on a US military base where soldiers train in a fake Iraqi village — a surreal meditation on performance, war, and American identity."},
+{t:"Sabar Bonda",d:"Rohan Kanawade",c:"India",s:"runner",a:"World Dramatic Grand Jury",r:"7.8",g:"Romance",rt:"93 min",desc:"An Indian love story of tender precision, described by the jury as the great modern love story. Kanawade's debut was one of the festival's emotional highpoints."},
+{t:"Seeds",d:"Brittany Shyne",c:"USA",s:"runner",a:"Grand Jury Prize: Documentary",r:"7.5",g:"Documentary",rt:"98 min",desc:"Shyne's debut documentary — selected for its exceptional filmmaking and humanist vision."},
+{t:"Twinless",d:"James Sweeney",c:"USA",s:"notable",a:"Audience Award US Dramatic",r:"7.0",g:"Comedy",rt:"101 min",desc:"A dramedy about grief between two strangers who each lost their twin — the audience's favourite film of the festival."},
+{t:"Zodiac Killer Project",d:"Charlie Shackleton",c:"USA/UK",s:"buzz",a:"NEXT Innovator Award",r:"7.4",g:"Documentary",rt:"78 min",desc:"A film about making a film about the Zodiac Killer — pivots so unexpectedly from its premise that the jury described it as unlike anything else."},
+],
+2024:[
+{t:"In the Summers",d:"Alessandra Lacorazza",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"6.9",g:"Drama",rt:"99 min",desc:"Two sisters visit their complicated father in New Mexico over multiple summers. Lacorazza's debut is emotional, controlled, and formally accomplished."},
+{t:"Sujo",d:"Astrid Rondero & Fernanda Valadez",c:"Mexico",s:"runner",a:"World Dramatic Grand Jury",r:"7.4",g:"Drama",rt:"121 min",desc:"A boy grows up in the shadow of his cartel father's legacy in rural Mexico. Beautifully shot, quietly devastating."},
+{t:"Daughters",d:"Angela Patton & Natalie Rae",c:"USA",s:"runner",a:"Grand Jury Prize: Documentary",r:"8.2",g:"Documentary",rt:"93 min",desc:"A father-daughter dance programme inside a Washington DC prison. One of the year's most moving documentaries — became a Netflix sensation."},
+{t:"Didi",d:"Sean Wang",c:"USA",s:"notable",a:"Audience Award US Dramatic",r:"7.6",g:"Coming-of-age",rt:"93 min",desc:"A 13-year-old Taiwanese-American boy navigates friendship, family and first love in 2008 Fremont. The year's most effervescent debut."},
+{t:"Love Lies Bleeding",d:"Rose Glass",c:"UK/USA",s:"buzz",a:"NEXT Award",r:"7.2",g:"Thriller",rt:"104 min",desc:"Kristen Stewart as a gym manager entangled with an ambitious bodybuilder. A neon-drenched, genre-bending thriller that became one of 2024's cult films."},
+{t:"A Different Man",d:"Aaron Schimberg",c:"USA",s:"buzz",a:"NEXT Audience Award",r:"7.5",g:"Dark Comedy",rt:"112 min",desc:"Premiered here before winning at Berlin — Sebastian Stan in a film about identity, disfigurement and the stories we tell about ourselves."},
+],
+2023:[
+{t:"A Thousand and One",d:"A.V. Rockwell",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"7.0",g:"Drama",rt:"117 min",desc:"A mother kidnaps her son from foster care and builds a life in New York. A raw, emotionally fearless debut about gentrification, poverty, and maternal love."},
+{t:"Scrapper",d:"Charlotte Regan",c:"UK",s:"runner",a:"World Dramatic Grand Jury",r:"7.2",g:"Comedy",rt:"84 min",desc:"A girl living alone after her mother's death creates an elaborate world of lies until her estranged father shows up. Witty, stylish, and genuinely moving."},
+{t:"The Eternal Memory",d:"Maite Alberdi",c:"Chile",s:"runner",a:"World Documentary Grand Jury",r:"8.2",g:"Documentary",rt:"85 min",desc:"The love story between a Chilean journalist and his wife as Alzheimer's gradually erases him. One of the most devastating and tender documentaries in recent memory."},
+{t:"Past Lives",d:"Celine Song",c:"USA/South Korea",s:"buzz",a:"US Dramatic Competition",r:"7.9",g:"Romance",rt:"106 min",desc:"Two childhood sweethearts reunite in New York years later. Song's debut became one of the great films of the year — screened here before its global release."},
+{t:"Fair Play",d:"Chloe Domont",c:"USA",s:"notable",a:"Audience Award",r:"6.8",g:"Thriller",rt:"113 min",desc:"A financial thriller about a couple's relationship imploding after the woman is promoted over her boyfriend. Sold to Netflix for a reported $20M."},
+],
+2022:[
+{t:"Nanny",d:"Nikyatu Jusu",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"6.4",g:"Horror",rt:"97 min",desc:"A Senegalese immigrant nanny working for a wealthy New York family begins experiencing supernatural visions. A horror film about the immigrant experience and maternal longing."},
+{t:"Utama",d:"Alejandro Loayza Grisi",c:"Bolivia",s:"runner",a:"World Dramatic Grand Jury",r:"7.1",g:"Drama",rt:"87 min",desc:"An elderly Bolivian couple on the Altiplano decide whether to abandon their climate-endangered home. Beautiful, minimal, and quietly heartbreaking."},
+{t:"Navalny",d:"Daniel Roher",c:"USA/Canada",s:"runner",a:"Audience Award: Documentary",r:"7.8",g:"Documentary",rt:"98 min",desc:"A documentary following Alexei Navalny as he investigates his own poisoning. The most gripping political documentary of the year — won the Oscar."},
+{t:"Cha Cha Real Smooth",d:"Cooper Raiff",c:"USA",s:"notable",a:"Audience Award: US Dramatic",r:"7.3",g:"Comedy",rt:"107 min",desc:"A 22-year-old with no life direction befriends a young mother and her autistic daughter. Cooper Raiff's charming, specific, semi-autobiographical debut."},
+{t:"Emergency",d:"Carey Williams",c:"USA",s:"notable",a:"In Competition",r:"7.0",g:"Thriller",rt:"105 min",desc:"Three Black college students discover a white girl passed out in their dorm room and debate calling 911. A sharp thriller about race and policing."},
+],
+2021:[
+{t:"CODA",d:"Siân Heder",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"7.9",g:"Drama",rt:"111 min",desc:"The only hearing member of a deaf family dreams of becoming a singer. Won all four major Sundance prizes and sold to Apple for a record $25M. Later won the Oscar for Best Picture."},
+{t:"Summer of Soul",d:"Questlove",c:"USA",s:"runner",a:"Grand Jury Prize: Documentary",r:"7.9",g:"Documentary",rt:"117 min",desc:"Questlove's documentary about the 1969 Harlem Cultural Festival — unseen footage presented as a radical reclamation of Black American musical history. Won the Oscar."},
+{t:"Flee",d:"Jonas Poher Rasmussen",c:"Denmark",s:"runner",a:"World Cinema: Documentary",r:"8.1",g:"Documentary",rt:"87 min",desc:"An animated documentary about an Afghan refugee's harrowing journey to Europe, told for the first time. Nominated for Oscars in animated, documentary, and international film."},
+{t:"Hive",d:"Blerta Basholli",c:"Kosovo",s:"runner",a:"World Cinema: Dramatic",r:"7.2",g:"Drama",rt:"84 min",desc:"A Kosovar woman whose husband is missing tries to start a business in her traditional village. Swept the World Cinema section."},
+],
+2020:[
+{t:"Minari",d:"Lee Isaac Chung",c:"USA",s:"winner",a:"Grand Jury Prize: Dramatic",r:"7.5",g:"Drama",rt:"115 min",desc:"A Korean-American family moves to rural Arkansas to farm. Chung's autobiographical portrait of immigrant family life — six Oscar nominations including Best Picture."},
+{t:"Boys State",d:"Jesse Moss & Amanda McBaine",c:"USA",s:"runner",a:"Grand Jury Prize: Documentary",r:"7.4",g:"Documentary",rt:"109 min",desc:"A documentary about Texas's Boys State programme, in which teenagers simulate democratic governance. Won the Oscar for Best Documentary."},
+{t:"Never Rarely Sometimes Always",d:"Eliza Hittman",c:"USA",s:"buzz",a:"US Dramatic Competition",r:"7.4",g:"Drama",rt:"101 min",desc:"A 17-year-old in rural Pennsylvania seeks an abortion. Premiered at Sundance, then won at Berlin."},
+{t:"The Invisible Man",d:"Leigh Whannell",c:"USA",s:"notable",a:"Midnight",r:"7.1",g:"Horror",rt:"124 min",desc:"Elisabeth Moss as a woman convinced her abusive ex (now invisible) is stalking her. A smart, propulsive genre film about gaslighting and domestic violence."},
+]}},
+kino:{name:"Kino Pavasaris — Vilnius IFF",loc:"Lithuania · March",award:"Best Film (€8,000)",
+desc:"Lithuania's largest film festival and the biggest cinema event in the Baltics, founded 1995. Focuses on European debut and second features. Competition prize established by Vilnius City Municipality.",
+years:{
+2025:[
+{t:"April",d:"Dea Kulumbegashvili",c:"Georgia/France/Italy",s:"winner",a:"Best Film",r:"7.1",g:"Drama",rt:"130 min",desc:"An ob-gyn in rural Georgia who provides illegal abortions. Kulumbegashvili's long, unblinking takes create remarkable formal courage. Previously won Special Jury at Venice 2024."},
+{t:"The New Year That Never Came",d:"Bogdan Mureșanu",c:"Romania",s:"runner",a:"Special Mention",r:"7.6",g:"Dark Comedy",rt:"110 min",desc:"A black comedy about the last day of Ceaușescu's Romania — December 21, 1989 — told through interconnected stories. Funny, tense, historically rich."},
+{t:"The Seed of the Sacred Fig",d:"Mohammad Rasoulof",c:"Iran/Germany",s:"runner",a:"Audience Award",r:"7.9",g:"Thriller",rt:"168 min",desc:"An Iranian judge grows paranoid his family supports the uprising. Rasoulof fled Iran to attend its Cannes premiere — a film made at enormous personal risk."},
+{t:"On Sacred and Profane",d:"Giedrė Beinoriūtė",c:"Lithuania",s:"runner",a:"Best Lithuanian Feature",r:"7.2",g:"Documentary",rt:"88 min",desc:"A meditative documentary exploring the sacred and the everyday in a small Lithuanian village."},
+{t:"Flow",d:"Gints Zilbalodis",c:"Latvia",s:"buzz",a:"Audience favourite",r:"8.2",g:"Animation",rt:"84 min",desc:"The Oscar-winning Latvian animated feature — a cat navigating a flooded world, told entirely without dialogue."},
+],
+2024:[
+{t:"In the Rearview",d:"Maciek Hamela",c:"Poland/France/Ukraine",s:"winner",a:"Best Film",r:"7.4",g:"Documentary",rt:"84 min",desc:"The director himself drives refugees fleeing Ukraine — their stories captured in the backseat. A documentary of quiet formal conviction and deep humanity."},
+{t:"The Peasants",d:"DK & Hugh Welchman",c:"Poland/Lithuania/Serbia",s:"runner",a:"Audience Award + Best Lithuanian Premiere",r:"7.4",g:"Animation",rt:"115 min",desc:"Animated feature using oil-painting animation — the technique from Loving Vincent — to tell a Polish peasant woman's story."},
+{t:"Hoard",d:"Luna Carmoon",c:"UK",s:"runner",a:"Special Mention",r:"7.2",g:"Drama",rt:"115 min",desc:"A bold debut about a girl raised in squalor by a compulsive hoarder, and how it shapes her into adulthood. Carmoon's visual style is unlike anything else in British cinema."},
+{t:"Anatomy of a Fall",d:"Justine Triet",c:"France",s:"buzz",a:"Competition entry",r:"7.8",g:"Thriller",rt:"152 min",desc:"The 2023 Palme d'Or winner screened in competition — a brilliant courtroom thriller with Sandra Hüller."},
+],
+2023:[
+{t:"(Winner not confirmed)",d:"28th edition — March 2023",c:"",s:"notable",a:"Best Film unconfirmed",r:"",g:"Drama",rt:"",desc:"The official best film winner for the 28th edition was not available from public sources. See kinopavasaris.lt for the full record."},
+{t:"Aftersun",d:"Charlotte Wells",c:"UK",s:"buzz",a:"Competition entry",r:"7.7",g:"Drama",rt:"101 min",desc:"A young woman reflects on a holiday with her father as a child — fragments of Super 8 footage and half-remembered moments. A devastating debut."},
+{t:"Disco Boy",d:"Giacomo Abbruzzese",c:"France/Belgium/Poland",s:"notable",a:"Competition entry",r:"6.8",g:"Drama",rt:"91 min",desc:"A Belarusian man joins the French Foreign Legion; a Nigerian fighter leads a guerrilla band in the Niger Delta. Won the Silver Bear for Artistic Contribution at Berlinale."},
+{t:"La Palisiada",d:"Philip Sotnychenko",c:"Ukraine",s:"notable",a:"Competition entry",r:"7.1",g:"Crime",rt:"100 min",desc:"A Ukrainian detective story set on the eve of the Soviet collapse, shot in black and white. One of the most distinctive Eastern European debuts in years."},
+],
+2022:[
+{t:"Luxembourg, Luxembourg",d:"Antonio Lukich",c:"Ukraine",s:"winner",a:"Best Film",r:"7.0",g:"Comedy",rt:"100 min",desc:"Twin brothers reconnect to visit their estranged father before he dies — a Ukrainian road comedy with both charm and melancholy. A surprise winner."},
+{t:"Pilgrims",d:"Laurynas Bareiša",c:"Lithuania",s:"runner",a:"Best Lithuanian Film",r:"7.3",g:"Drama",rt:"76 min",desc:"A woman returns to the small town where her sister was murdered and develops an unsettling friendship with a man from her past. Won the Orizzonti Best Film at Venice 2021."},
+{t:"Hit the Road",d:"Panah Panahi",c:"Iran",s:"buzz",a:"Competition entry",r:"7.6",g:"Drama",rt:"93 min",desc:"An Iranian family takes a road trip under mysterious circumstances — Panah Panahi's debut is tender, playful, and deeply humane."},
+],
+2021:[
+{t:"Pilgrims",d:"Laurynas Bareiša",c:"Lithuania",s:"winner",a:"Best Film",r:"7.3",g:"Drama",rt:"76 min",desc:"Won the Orizzonti Best Film at Venice 2021 — a tense, elliptical portrait of grief and friendship in Lithuania."},
+{t:"Preparations to Be Together for an Unknown Period of Time",d:"Lili Horváth",c:"Hungary",s:"runner",a:"Special Mention",r:"7.0",g:"Thriller",rt:"95 min",desc:"A neurosurgeon returns to Budapest for a man she claims she met at a conference — a psychological thriller about obsession and memory."},
+{t:"Collective",d:"Alexander Nanau",c:"Romania",s:"buzz",a:"Competition entry",r:"8.1",g:"Documentary",rt:"109 min",desc:"A documentary following the aftermath of a Bucharest nightclub fire — an extraordinary investigation into systemic corruption in the Romanian health system."},
+],
+2020:[
+{t:"Corpus Christi",d:"Jan Komasa",c:"Poland",s:"winner",a:"Best Film",r:"7.7",g:"Drama",rt:"115 min",desc:"A young man who found faith in juvenile detention poses as a priest in a small Polish village. Nominated for the Oscar for Best International Film — tense, morally complex, beautifully acted."},
+{t:"The Disciple",d:"Chaitanya Tamhane",c:"India",s:"runner",a:"Special Mention",r:"7.2",g:"Drama",rt:"127 min",desc:"A young Indian classical musician strives for perfection. Won Best Screenplay at Venice 2020. Produced by Alfonso Cuarón."},
+{t:"Never Rarely Sometimes Always",d:"Eliza Hittman",c:"USA",s:"buzz",a:"Competition entry",r:"7.4",g:"Drama",rt:"101 min",desc:"Hittman's ultra-naturalistic abortion drama screened widely in 2020 after its Berlin Silver Bear and Sundance prizes."},
+]}}
+};
+
+// ── GENRES (derived + extras) ──────────────────────────────────────
+const ALL_GENRES = ["All","Animation","Art Cinema","Biopic","Comedy","Coming-of-age","Crime","Dark Comedy","Documentary","Drama","Historical","Horror","Musical","Romance","Satire","Sci-Fi","Thriller","Western"];
+
+// ── STATE ──────────────────────────────────────────────────────────
+const festOrder = ['cannes','venice','berlin','sundance','kino'];
+const festShort = {cannes:'Cannes',venice:'Venice',berlin:'Berlinale',sundance:'Sundance',kino:'Kino Pavasaris'};
+const YEARS = [2025,2024,2023,2022,2021,2020];
+
+let activeFest = 'cannes';
+let activeYear = 2025;
+let activeGenre = 'All';
+let hideSeen = false;
+
+// ── STORAGE ───────────────────────────────────────────────────────
+function seenKey(fest,year,title){return `seen:${fest}:${year}:${title.replace(/\s+/g,'_')}`}
+function isSeen(fest,year,title){try{return localStorage.getItem(seenKey(fest,year,title))==='1'}catch(e){return false}}
+function toggleSeen(fest,year,title){
+  try{
+    const k=seenKey(fest,year,title);
+    localStorage.getItem(k)==='1'?localStorage.removeItem(k):localStorage.setItem(k,'1');
+  }catch(e){}
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+const statusPriority = {winner:0,runner:1,buzz:2,notable:3};
+function iconClass(s){return s==='winner'?'ci-winner':s==='runner'?'ci-runner':s==='buzz'?'ci-buzz':'ci-notable'}
+function iconText(s){return s==='winner'?'★':s==='runner'?'◆':s==='buzz'?'◈':'○'}
+function pillClass(s){return s==='winner'?'pill-w':s==='runner'?'pill-r':s==='buzz'?'pill-b':'pill-n'}
+
+function seenCount(fest){
+  let total=0,seen=0;
+  YEARS.forEach(y=>{
+    (DATA[fest].years[y]||[]).forEach(f=>{total++;if(isSeen(fest,y,f.t))seen++;});
+  });
+  return {seen,total};
+}
+
+// ── RENDER SIDEBAR ────────────────────────────────────────────────
+function renderSidebar(){
+  let h=`<div class="sb-label">Festival</div>`;
+  festOrder.forEach(id=>{
+    const {seen,total}=seenCount(id);
+    h+=`<button class="sb-btn${id===activeFest?' active':''}" onclick="setFest('${id}')">${festShort[id]}</button>`;
+  });
+  h+=`<hr class="sb-divider">`;
+  h+=`<div class="sb-label">Year</div><div class="year-row">`;
+  YEARS.forEach(y=>{
+    h+=`<button class="yr-btn${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
+  });
+  h+=`</div>`;
+  h+=`<hr class="sb-divider">`;
+  // seen summary
+  const {seen,total}=seenCount(activeFest);
+  if(seen>0)h+=`<div class="seen-count">✓ ${seen} of ${total} seen across all years</div>`;
+  document.getElementById('sidebar').innerHTML=h;
+}
+
+// ── RENDER CONTENT ────────────────────────────────────────────────
+function renderContent(){
+  const f=DATA[activeFest];
+  const films=(f.years[activeYear]||[]).filter(film=>
+    activeGenre==='All' || film.g===activeGenre
+  );
+
+  const groups = [
+    {label:'Winner',list:films.filter(f=>f.s==='winner')},
+    {label:'Runners-up & awards',list:films.filter(f=>f.s==='runner')},
+    {label:'Notable buzz',list:films.filter(f=>f.s==='buzz')},
+    {label:'Competition entries',list:films.filter(f=>f.s==='notable')},
+  ].filter(g=>g.list.length>0);
+
+  let h=`
+    <div class="fest-head">
+      <div class="fest-name">${f.name}</div>
+      <div class="tags">
+        <span class="tag tag-loc">${f.loc}</span>
+        <span class="tag tag-award">${f.award}</span>
+      </div>
+      <p class="fest-desc">${f.desc}</p>
+    </div>
+    <div class="controls">
+      <div class="year-pills">`;
+  YEARS.forEach(y=>{
+    h+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
+  });
+  h+=`</div>
+      <div class="ctrl-sep"></div>
+      <select class="genre-sel" onchange="setGenre(this.value)">`;
+  ALL_GENRES.forEach(g=>{h+=`<option value="${g}"${g===activeGenre?' selected':''}>${g}</option>`;});
+  h+=`</select>
+      <button class="hide-seen-btn${hideSeen?' active':''}" onclick="toggleHideSeen()">
+        ${hideSeen?'Show all':'Hide seen'}
+      </button>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><span class="leg-dot ld-w"></span>Winner</div>
+      <div class="leg-item"><span class="leg-dot ld-r"></span>Runner-up / award</div>
+      <div class="leg-item"><span class="leg-dot ld-b"></span>Notable buzz</div>
+      <div class="leg-item"><span class="leg-dot ld-n"></span>Competition entry</div>
+    </div>`;
+
+  if(!films.length){
+    h+=`<div class="empty-msg">No films match this filter.</div>`;
+  } else {
+    groups.forEach(({label,list})=>{
+      h+=`<div class="sec-label">${label}</div>`;
+      list.forEach((film,i)=>{
+        const uid=`${activeFest}_${activeYear}_${i}_${label.replace(/\s/g,'_')}`;
+        const seen=isSeen(activeFest,activeYear,film.t);
+        const seenHidden=hideSeen&&seen;
+        h+=`
+          <div class="film-card${film.s==='winner'?' winner':''}${seen?' seen':''}${seenHidden?' hidden-seen':''}" id="card-${uid}">
+            <div class="card-head" onclick="toggle('${uid}',event)">
+              <div class="card-icon ${iconClass(film.s)}">${iconText(film.s)}</div>
+              <div class="card-titles">
+                <div class="card-title">${film.t}</div>
+                <div class="card-sub">Dir. ${film.d}${film.c?' · '+film.c:''}</div>
+              </div>
+              <div class="card-right">
+                ${film.a?`<span class="award-pill ${pillClass(film.s)}">${film.a}</span>`:''}
+                ${film.g?`<span class="genre-badge">${film.g}</span>`:''}
+                ${film.r?`<span class="rating">★ ${film.r}</span>`:''}
+                <div class="seen-cb-wrap" onclick="toggleSeenCard('${activeFest}','${activeYear}','${film.t.replace(/'/g,"\\'")}','${uid}',event)">
+                  <div class="seen-cb" title="${seen?'Mark unseen':'Mark as seen'}">
+                    <span class="seen-check">✓</span>
+                  </div>
+                </div>
+                <span class="chevron">▼</span>
+              </div>
+            </div>
+            <div class="card-detail">
+              ${film.desc?`<p class="detail-desc">${film.desc}</p>`:''}
+              <div>
+                ${film.g?`<div class="detail-row"><span class="dk">Genre</span><span class="dv"><strong>${film.g}</strong></span></div>`:''}
+                ${film.rt?`<div class="detail-row"><span class="dk">Runtime</span><span class="dv">${film.rt}</span></div>`:''}
+                ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
+                ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
+                ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>★ ${film.r}</strong></span></div>`:''}
+              </div>
+            </div>
+          </div>`;
+      });
+    });
+  }
+
+  document.getElementById('content').innerHTML=h;
+}
+
+// ── INTERACTION ───────────────────────────────────────────────────
+function toggle(uid,e){
+  // don't expand if clicking the seen checkbox
+  if(e&&e.target.closest('.seen-cb-wrap'))return;
+  document.getElementById('card-'+uid).classList.toggle('expanded');
+}
+
+function toggleSeenCard(fest,year,title,uid,e){
+  e.stopPropagation();
+  toggleSeen(fest,parseInt(year),title);
+  renderSidebar();
+  renderContent();
+}
+
+function setFest(id){activeFest=id;renderSidebar();renderContent()}
+function setYear(y){activeYear=y;renderSidebar();renderContent()}
+function setGenre(g){activeGenre=g;renderContent()}
+function toggleHideSeen(){hideSeen=!hideSeen;renderContent()}
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderSidebar();
+renderContent();
+</script>
+</body>
+</html>
