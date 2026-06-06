@@ -689,7 +689,25 @@ function renderContent(){
 // ── INTERACTION ───────────────────────────────────────────────────
 function toggle(uid,e){
   if(e&&e.target.closest('.seen-cb-wrap'))return;
-  document.getElementById('card-'+uid).classList.toggle('expanded');
+  const card=document.getElementById('card-'+uid);
+  const wasExpanded=card.classList.contains('expanded');
+  card.classList.toggle('expanded');
+  if(!wasExpanded){
+    // after the detail panel renders, scroll it fully into view
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        const detail=card.querySelector('.card-detail');
+        const cardBottom=card.getBoundingClientRect().bottom;
+        const vh=window.innerHeight;
+        // account for mobile bottom nav (~60px)
+        const navH=isMobile()?64:0;
+        if(cardBottom>vh-navH){
+          const overshoot=cardBottom-(vh-navH)+12;
+          window.scrollBy({top:overshoot,behavior:'smooth'});
+        }
+      });
+    });
+  }
 }
 function toggleSeenCard(fest,year,title,uid,e){
   e.stopPropagation();
@@ -724,6 +742,26 @@ function renderAll(){
 // ── INIT ──────────────────────────────────────────────────────────
 renderAll();
 window.addEventListener('resize',()=>{renderAll();},{ passive:true });
+
+// Prevent card toggling when user is scrolling on touch devices.
+// We track touchstart position; if finger moved more than 8px it's a scroll, not a tap.
+let _touchStartY=0;
+let _touchMoved=false;
+document.addEventListener('touchstart',e=>{
+  _touchStartY=e.touches[0].clientY;
+  _touchMoved=false;
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+  if(Math.abs(e.touches[0].clientY-_touchStartY)>8)_touchMoved=true;
+},{passive:true});
+// Intercept clicks that fired because of scroll
+document.addEventListener('click',e=>{
+  if(_touchMoved){
+    const head=e.target.closest('.card-head');
+    if(head){e.stopImmediatePropagation();e.preventDefault();}
+    _touchMoved=false;
+  }
+},true);
 </script>
 </body>
 </html>
