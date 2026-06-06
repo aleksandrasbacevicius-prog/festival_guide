@@ -138,11 +138,77 @@ h1 em{font-style:italic;color:var(--gold)}
 .sidebar::-webkit-scrollbar-track{background:transparent}
 .sidebar::-webkit-scrollbar-thumb{background:var(--surf3);border-radius:2px}
 
+/* ── MOBILE BOTTOM NAV ── */
+.mobile-nav{display:none}
+.mobile-filter-bar{display:none}
+
 @media(max-width:720px){
-  .shell{grid-template-columns:1fr}
-  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:1.5rem}
-  .content{padding:1.5rem}
-  h1{font-size:2rem}
+  header{padding:2rem 1.25rem 1.5rem}
+  h1{font-size:1.8rem}
+  .header-meta{font-size:.8rem}
+
+  /* hide desktop sidebar */
+  .sidebar{display:none}
+
+  /* full width content */
+  .shell{grid-template-columns:1fr;padding-bottom:70px}
+  .content{padding:1rem 1rem 2rem}
+
+  .fest-name{font-size:1.35rem}
+  .fest-desc{font-size:.82rem}
+
+  /* controls: stack genre + hide-seen, hide year pills (moved to top bar) */
+  .controls{gap:.6rem;padding-bottom:1rem}
+  .year-pills{display:none}
+  .ctrl-sep{display:none}
+  .genre-sel{flex:1;font-size:.8rem;padding:.4rem .65rem}
+  .hide-seen-btn{font-size:.75rem;padding:.35rem .75rem}
+
+  /* cards: larger tap targets, hide award pill & genre badge to save space */
+  .card-head{padding:.75rem .85rem;gap:.65rem}
+  .card-icon{width:28px;height:28px;font-size:.65rem}
+  .card-title{font-size:.93rem}
+  .card-sub{font-size:.72rem}
+  .award-pill{display:none}
+  .genre-badge{display:none}
+  .rating{font-size:.7rem}
+  .seen-cb{width:20px;height:20px}
+  .card-detail{padding:0 .85rem .85rem}
+  .detail-desc{font-size:.82rem}
+
+  /* legend: compact */
+  .legend{gap:.7rem;font-size:.67rem;margin-bottom:1rem}
+
+  /* ── MOBILE BOTTOM NAV ── */
+  .mobile-nav{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;
+    background:rgba(14,14,16,0.96);
+    backdrop-filter:blur(12px);
+    border-top:1px solid var(--border);
+    z-index:100;
+    padding:0 0 env(safe-area-inset-bottom,0);
+  }
+  .mob-nav-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:none;border:none;color:var(--dim);font-family:'DM Sans',sans-serif;
+    font-size:.58rem;font-weight:400;padding:.6rem .2rem;cursor:pointer;
+    transition:color .12s;gap:3px;letter-spacing:.03em;min-height:56px;
+  }
+  .mob-nav-btn.active{color:var(--gold)}
+  .mob-nav-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0;transition:opacity .12s}
+  .mob-nav-btn.active .mob-nav-dot{opacity:1}
+
+  /* ── MOBILE YEAR STRIP ── */
+  .mobile-year-strip{
+    display:flex;gap:6px;
+    overflow-x:auto;padding:.75rem 1rem;
+    border-bottom:1px solid var(--border);
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .mobile-year-strip::-webkit-scrollbar{display:none}
+  .mobile-year-strip .year-pill{flex-shrink:0;font-size:.75rem;padding:.32rem .75rem}
 }
 </style>
 </head>
@@ -157,6 +223,8 @@ h1 em{font-style:italic;color:var(--gold)}
   <nav class="sidebar" id="sidebar"></nav>
   <main class="content" id="content"></main>
 </div>
+
+<nav class="mobile-nav" id="mobileNav"></nav>
 
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────
@@ -441,10 +509,32 @@ function seenCount(fest){
 }
 
 // ── RENDER SIDEBAR ────────────────────────────────────────────────
+const isMobile=()=>window.innerWidth<=720;
+
+// ── RENDER MOBILE NAV ─────────────────────────────────────────────
+function renderMobileNav(){
+  const nav=document.getElementById('mobileNav');
+  if(!nav)return;
+  // icons: film reel, film strip, clapperboard, sun, leaf
+  const icons={
+    cannes:'🎬',venice:'🦁',berlin:'🐻',sundance:'☀',kino:'🌿'
+  };
+  let h='';
+  festOrder.forEach(id=>{
+    const {seen,total}=seenCount(id);
+    h+=`<button class="mob-nav-btn${id===activeFest?' active':''}" onclick="setFest('${id}')">
+      <span style="font-size:1.15rem;line-height:1">${icons[id]}</span>
+      <span>${festShort[id]}</span>
+      <span class="mob-nav-dot"></span>
+    </button>`;
+  });
+  nav.innerHTML=h;
+}
+
+// ── RENDER SIDEBAR (desktop) ──────────────────────────────────────
 function renderSidebar(){
   let h=`<div class="sb-label">Festival</div>`;
   festOrder.forEach(id=>{
-    const {seen,total}=seenCount(id);
     h+=`<button class="sb-btn${id===activeFest?' active':''}" onclick="setFest('${id}')">${festShort[id]}</button>`;
   });
   h+=`<hr class="sb-divider">`;
@@ -452,9 +542,7 @@ function renderSidebar(){
   YEARS.forEach(y=>{
     h+=`<button class="yr-btn${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
   });
-  h+=`</div>`;
-  h+=`<hr class="sb-divider">`;
-  // seen summary
+  h+=`</div><hr class="sb-divider">`;
   const {seen,total}=seenCount(activeFest);
   if(seen>0)h+=`<div class="seen-count">✓ ${seen} of ${total} seen across all years</div>`;
   document.getElementById('sidebar').innerHTML=h;
@@ -464,17 +552,31 @@ function renderSidebar(){
 function renderContent(){
   const f=DATA[activeFest];
   const films=(f.years[activeYear]||[]).filter(film=>
-    activeGenre==='All' || film.g===activeGenre
+    activeGenre==='All'||film.g===activeGenre
   );
-
-  const groups = [
+  const groups=[
     {label:'Winner',list:films.filter(f=>f.s==='winner')},
     {label:'Runners-up & awards',list:films.filter(f=>f.s==='runner')},
     {label:'Notable buzz',list:films.filter(f=>f.s==='buzz')},
     {label:'Competition entries',list:films.filter(f=>f.s==='notable')},
   ].filter(g=>g.list.length>0);
 
+  // mobile year strip
+  let yearStrip='';
+  if(isMobile()){
+    yearStrip=`<div class="mobile-year-strip">`;
+    YEARS.forEach(y=>{
+      yearStrip+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
+    });
+    yearStrip+=`</div>`;
+  }
+
+  // seen count for mobile
+  const {seen:sc,total:st}=seenCount(activeFest);
+  const seenLine=sc>0?`<div style="font-size:.72rem;color:var(--seen);margin-top:.3rem">✓ ${sc} of ${st} seen across all years</div>`:'';
+
   let h=`
+    ${yearStrip}
     <div class="fest-head">
       <div class="fest-name">${f.name}</div>
       <div class="tags">
@@ -482,14 +584,14 @@ function renderContent(){
         <span class="tag tag-award">${f.award}</span>
       </div>
       <p class="fest-desc">${f.desc}</p>
+      ${isMobile()?seenLine:''}
     </div>
     <div class="controls">
       <div class="year-pills">`;
   YEARS.forEach(y=>{
     h+=`<button class="year-pill${y===activeYear?' active':''}" onclick="setYear(${y})">${y}</button>`;
   });
-  h+=`</div>
-      <div class="ctrl-sep"></div>
+  h+=`</div><div class="ctrl-sep"></div>
       <select class="genre-sel" onchange="setGenre(this.value)">`;
   ALL_GENRES.forEach(g=>{h+=`<option value="${g}"${g===activeGenre?' selected':''}>${g}</option>`;});
   h+=`</select>
@@ -543,38 +645,43 @@ function renderContent(){
                 ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>★ ${film.r}</strong></span></div>`:''}
               </div>
               ${film.t&&film.t!=='(Festival cancelled — COVID-19)'&&film.t!=='(Winner not confirmed)'?`<a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>`:''}
-              </div>
             </div>
           </div>`;
       });
     });
   }
-
   document.getElementById('content').innerHTML=h;
 }
 
 // ── INTERACTION ───────────────────────────────────────────────────
 function toggle(uid,e){
-  // don't expand if clicking the seen checkbox
   if(e&&e.target.closest('.seen-cb-wrap'))return;
   document.getElementById('card-'+uid).classList.toggle('expanded');
 }
-
 function toggleSeenCard(fest,year,title,uid,e){
   e.stopPropagation();
   toggleSeen(fest,parseInt(year),title);
-  renderSidebar();
-  renderContent();
+  renderAll();
 }
-
-function setFest(id){activeFest=id;renderSidebar();renderContent()}
-function setYear(y){activeYear=y;renderSidebar();renderContent()}
+function setFest(id){
+  activeFest=id;
+  renderAll();
+  // scroll content to top on mobile
+  if(isMobile())window.scrollTo({top:0,behavior:'smooth'});
+}
+function setYear(y){activeYear=y;renderAll()}
 function setGenre(g){activeGenre=g;renderContent()}
 function toggleHideSeen(){hideSeen=!hideSeen;renderContent()}
 
+function renderAll(){
+  renderSidebar();
+  renderMobileNav();
+  renderContent();
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
-renderSidebar();
-renderContent();
+renderAll();
+window.addEventListener('resize',()=>{renderAll();},{ passive:true });
 </script>
 </body>
 </html>
