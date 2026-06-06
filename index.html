@@ -195,6 +195,8 @@ h1 em{font-style:italic;color:var(--gold)}
     font-size:.58rem;font-weight:400;padding:.6rem .2rem;cursor:pointer;
     transition:color .12s;gap:3px;letter-spacing:.03em;min-height:56px;
   }
+  .mob-nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+  .mob-nav-icon svg{width:22px;height:22px}
   .mob-nav-btn.active{color:var(--gold)}
   .mob-nav-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:0;transition:opacity .12s}
   .mob-nav-btn.active .mob-nav-dot{opacity:1}
@@ -471,12 +473,93 @@ years:{
 ]}}
 };
 
+
+// ── MUBI CURATED LIST ──────────────────────────────────────────────
+const MUBI_COLLECTIONS = [
+  {
+    id:'new_voices', label:'New Voices', icon:'◈',
+    desc:`Debut and sophomore features that announced extraordinary new directors — the kind of films MUBI champions before anyone else catches on.`,
+    films:[
+      {t:`Aftersun`,d:`Charlotte Wells`,c:`UK`,y:2022,r:`7.7`,g:`Drama`,rt:`101 min`,desc:`A young woman revisits Super 8 footage of a holiday with her father as a child — fragments, half-remembered moments, the shape of a person she couldn't see clearly then. Wells's debut is quietly devastating.`},
+      {t:`Sick of Myself`,d:`Kristoffer Borgli`,c:`Norway`,y:2022,r:`7.1`,g:`Dark Comedy`,rt:`96 min`,desc:`A woman deliberately disfigures herself to outdo her artist boyfriend's sudden fame. Borgli's wickedly funny satire of social media narcissism and competitive victimhood.`},
+      {t:`Hit the Road`,d:`Panah Panahi`,c:`Iran`,y:2021,r:`7.6`,g:`Drama`,rt:`93 min`,desc:`An Iranian family on a road trip whose real destination is gradually revealed. Panah Panahi announces himself as a major talent in his own right — playful, tender, devastating.`},
+      {t:`Murina`,d:`Antoneta Alamat Kusijanovic`,c:`Croatia`,y:2021,r:`6.9`,g:`Drama`,rt:`93 min`,desc:`A teenage girl and her domineering father clash when a charismatic family friend arrives on their Croatian island. Won the Camera d'Or at Cannes 2021.`},
+      {t:`Beanpole`,d:`Kantemir Balagov`,c:`Russia`,y:2019,r:`7.6`,g:`Drama`,rt:`137 min`,desc:`Two women navigate post-WWII Leningrad — trauma, survival, love and complicity. Balagov's sophomore film is formally ravishing and emotionally shattering. Won Best Director at Cannes Un Certain Regard.`},
+      {t:`I Am Not a Witch`,d:`Rungano Nyoni`,c:`UK/Zambia`,y:2017,r:`7.0`,g:`Dark Comedy`,rt:`93 min`,desc:`An 8-year-old girl in Zambia is convicted of witchcraft and sent to a witch camp. Nyoni's debut is a surreal, deadpan fable of extraordinary formal invention.`},
+      {t:`The Disciple`,d:`Chaitanya Tamhane`,c:`India`,y:2020,r:`7.2`,g:`Drama`,rt:`127 min`,desc:`A young Indian classical musician strives for an impossible standard of purity. Produced by Alfonso Cuaron. Won Best Screenplay at Venice 2020.`},
+    ]
+  },
+  {
+    id:'political_edge', label:'Political Edge', icon:'◆',
+    desc:`Films that use cinema as a tool of investigation, dissent, or witness — the kind of urgent political filmmaking MUBI consistently platforms.`,
+    films:[
+      {t:`Do Not Expect Too Much from the End of the World`,d:`Radu Jude`,c:`Romania`,y:2023,r:`7.6`,g:`Dark Comedy`,rt:`163 min`,desc:`A production assistant drives around Bucharest casting a workplace safety film — while Romania's political and moral rot unfolds around her. Radu Jude's most formally wild film. Special Jury Prize at Locarno 2023.`},
+      {t:`No Other Land`,d:`Basel Adra and Yuval Abraham`,c:`Palestine/Norway`,y:2024,r:`8.5`,g:`Documentary`,rt:`95 min`,desc:`A Palestinian collective documents Israel's demolition of their West Bank village. Won the documentary prize at Berlinale 2024 amid political controversy — the filmmakers made impassioned speeches from the stage.`},
+      {t:`There Is No Evil`,d:`Mohammad Rasoulof`,c:`Iran`,y:2020,r:`7.9`,g:`Drama`,rt:`150 min`,desc:`Four stories about Iranians who must decide whether to participate in the state's execution machine. Rasoulof directed under travel ban — the Golden Bear was accepted in absentia.`},
+      {t:`The Settlers`,d:`Felipe Galvez Haberle`,c:`Chile`,y:2023,r:`7.1`,g:`Historical`,rt:`97 min`,desc:`Three men enact the Selknam genocide in 1901 Patagonia — a searing anti-Western about colonial violence rendered with austere, sun-bleached precision.`},
+      {t:`Collective`,d:`Alexander Nanau`,c:`Romania`,y:2019,r:`8.1`,g:`Documentary`,rt:`109 min`,desc:`A documentary following the aftermath of a Bucharest nightclub fire. An extraordinary investigation into systemic corruption — nominated for two Oscars. Essential viewing.`},
+      {t:`Lingui, the Sacred Bonds`,d:`Mahamat-Saleh Haroun`,c:`Chad/France`,y:2021,r:`7.3`,g:`Drama`,rt:`87 min`,desc:`A single mother and her teenage daughter seek an illegal abortion in N'Djamena. Haroun's most politically urgent film — a meditation on womanhood and solidarity.`},
+      {t:`Bad Luck Banging or Loony Porn`,d:`Radu Jude`,c:`Romania`,y:2021,r:`7.2`,g:`Art Cinema`,rt:`106 min`,desc:`A teacher's sex tape leaks and a school committee convenes — but the film becomes a diagnosis of Romanian society's moral hypocrisy. Golden Bear at Berlinale 2021.`},
+    ]
+  },
+  {
+    id:'slow_cinema', label:'Slow Cinema', icon:'○',
+    desc:`Films that trust you to settle into their rhythms — long takes, minimal dialogue, images that accumulate meaning. The MUBI sensibility at its purest.`,
+    films:[
+      {t:`Memoria`,d:`Apichatpong Weerasethakul`,c:`Colombia/Thailand`,y:2021,r:`6.9`,g:`Art Cinema`,rt:`136 min`,desc:`A woman in Bogota hears a mysterious boom that no one else can. Weerasethakul's most formally radical film — a trance of sensory cinema. Won the Jury Prize at Cannes 2021.`},
+      {t:`Wheel of Fortune and Fantasy`,d:`Ryusuke Hamaguchi`,c:`Japan`,y:2021,r:`7.7`,g:`Drama`,rt:`121 min`,desc:`Three novellas about coincidences, chance encounters, and desire. Hamaguchi's exquisite triptych — three chamber conversations of perfect formal control. Silver Bear Grand Jury Prize at Berlinale.`},
+      {t:`Undine`,d:`Christian Petzold`,c:`Germany`,y:2020,r:`7.2`,g:`Romance`,rt:`91 min`,desc:`A woman who tells her ex she will kill him if he leaves — and then falls in love with a diver. Petzold's most quietly magical film, weaving German myth into everyday Berlin life.`},
+      {t:`A Traveler's Needs`,d:`Hong Sangsoo`,c:`South Korea`,y:2024,r:`7.2`,g:`Drama`,rt:`89 min`,desc:`Isabelle Huppert as a foreigner who teaches French in Korea through an intuitive method. Hong's typically elliptical, wine-soaked world at its most charming. Silver Bear Grand Jury Prize at Berlinale 2024.`},
+      {t:`Oslo, August 31st`,d:`Joachim Trier`,c:`Norway`,y:2011,r:`7.9`,g:`Drama`,rt:`95 min`,desc:`A recovering addict spends one day in Oslo on home leave from rehab. Trier's second film is one of the great films about depression and the weight of the past — a MUBI classic.`},
+      {t:`Afire`,d:`Christian Petzold`,c:`Germany`,y:2023,r:`7.2`,g:`Drama`,rt:`102 min`,desc:`A group of friends on a Baltic coast holiday as wildfires approach in the distance. Petzold's most sensory film. Silver Bear at Berlinale 2023.`},
+    ]
+  },
+  {
+    id:'body_and_desire', label:'Body and Desire', icon:'★',
+    desc:`Films preoccupied with the physical — flesh, transformation, appetite, sexuality. A recurring MUBI obsession, from body horror to erotic drama.`,
+    films:[
+      {t:`Titane`,d:`Julia Ducournau`,c:`France`,y:2021,r:`6.9`,g:`Horror`,rt:`108 min`,desc:`A car-show dancer with a titanium skull plate becomes pregnant by a car and disguises herself as a missing boy. Ducournau's Palme d'Or winner — radical body horror that made history.`},
+      {t:`Bones and All`,d:`Luca Guadagnino`,c:`USA`,y:2022,r:`7.5`,g:`Romance`,rt:`130 min`,desc:`Young cannibals in 1980s America — Timothee Chalamet and Taylor Russell in Guadagnino's most emotionally devastating film. Best Director at Venice 2022.`},
+      {t:`The Substance`,d:`Coralie Fargeat`,c:`France/UK`,y:2024,r:`7.3`,g:`Horror`,rt:`140 min`,desc:`Demi Moore takes a drug that generates a younger version of herself (Margaret Qualley). Fargeat's gleefully gross body-horror satire about beauty and ageing. Best Screenplay at Cannes 2024.`},
+      {t:`Passages`,d:`Ira Sachs`,c:`France`,y:2023,r:`6.8`,g:`Drama`,rt:`91 min`,desc:`A filmmaker (Franz Rogowski) destroys his marriage and a new relationship with equal recklessness. Intimate, deliberately uncomfortable, and formally precise.`},
+      {t:`Happening`,d:`Audrey Diwan`,c:`France`,y:2021,r:`7.5`,g:`Drama`,rt:`100 min`,desc:`A student seeks an illegal abortion in 1960s France. Diwan's formally precise film is both harrowing and deeply humane — became essential viewing after Roe v. Wade. Golden Lion at Venice 2021.`},
+      {t:`The Worst Person in the World`,d:`Joachim Trier`,c:`Norway`,y:2021,r:`8.0`,g:`Romance`,rt:`128 min`,desc:`A woman navigates love, career, and identity in contemporary Oslo. Renate Reinsve won Best Actress at Cannes 2021. Trier's most accessible and emotionally devastating film.`},
+    ]
+  },
+  {
+    id:'documentary_truth', label:'Documentary Truth', icon:'◈',
+    desc:`MUBI consistently champions documentary filmmaking as an art form — these are the non-fiction films that defined recent years.`,
+    films:[
+      {t:`All the Beauty and the Bloodshed`,d:`Laura Poitras`,c:`USA`,y:2022,r:`8.1`,g:`Documentary`,rt:`117 min`,desc:`Portrait of photographer Nan Goldin and her campaign against the Sackler family's opioid empire. One of the great American documentaries of the decade. Golden Lion at Venice 2022.`},
+      {t:`The Eternal Memory`,d:`Maite Alberdi`,c:`Chile`,y:2023,r:`8.2`,g:`Documentary`,rt:`85 min`,desc:`The love story between a Chilean journalist and his wife as Alzheimer's gradually erases him. One of the most devastating and tender documentaries in recent memory. Grand Jury Prize at Sundance 2023.`},
+      {t:`Flee`,d:`Jonas Poher Rasmussen`,c:`Denmark`,y:2021,r:`8.1`,g:`Documentary`,rt:`87 min`,desc:`An animated documentary about an Afghan refugee's secret history, told for the first time. Nominated for Oscars in three categories — animated film, documentary, and international film.`},
+      {t:`Dahomey`,d:`Mati Diop`,c:`France/Senegal`,y:2024,r:`6.8`,g:`Documentary`,rt:`68 min`,desc:`26 looted treasures from the Kingdom of Dahomey are repatriated to Benin — and Diop gives them a voice. A formally bold and profoundly moving film. Golden Bear at Berlinale 2024.`},
+      {t:`On the Adamant`,d:`Nicolas Philibert`,c:`France`,y:2023,r:`7.2`,g:`Documentary`,rt:`109 min`,desc:`A floating day centre on the Seine for adults with mental illness — Philibert's humanist observational cinema at its most essential. Golden Bear at Berlinale 2023.`},
+      {t:`Navalny`,d:`Daniel Roher`,c:`USA/Canada`,y:2022,r:`7.8`,g:`Documentary`,rt:`98 min`,desc:`Daniel Roher follows Alexei Navalny as he investigates his own poisoning. The most gripping political documentary of the year — won the Oscar for Best Documentary.`},
+    ]
+  },
+  {
+    id:'world_cinema', label:'World Cinema', icon:'◆',
+    desc:`MUBI's global reach goes far beyond Europe and America — films from Iran, South Korea, India, West Africa, and South America that deserve a wider audience.`,
+    films:[
+      {t:`Drive My Car`,d:`Ryusuke Hamaguchi`,c:`Japan`,y:2021,r:`7.9`,g:`Drama`,rt:`179 min`,desc:`A theatre director adapts Chekhov while processing grief over his wife. Won Best Screenplay at Cannes, Best International Film at the Oscars. A modern masterpiece — one of the essential films of its decade.`},
+      {t:`Decision to Leave`,d:`Park Chan-wook`,c:`South Korea`,y:2022,r:`7.7`,g:`Thriller`,rt:`138 min`,desc:`A detective becomes obsessed with the prime suspect in a murder — his dead client's wife. Park's most formally intricate and romantically charged film. Best Director at Cannes 2022.`},
+      {t:`A Hero`,d:`Asghar Farhadi`,c:`Iran`,y:2021,r:`7.2`,g:`Drama`,rt:`127 min`,desc:`A prisoner's good deed spirals into uncontrollable consequences. Farhadi's moral puzzle-making at its sharpest — Grand Prix at Cannes 2021.`},
+      {t:`All We Imagine as Light`,d:`Payal Kapadia`,c:`India`,y:2024,r:`7.8`,g:`Drama`,rt:`118 min`,desc:`Three women navigating love, longing and belonging in Mumbai. The first Indian film in Cannes Competition in 30 years. Grand Prix at Cannes 2024.`},
+      {t:`No Bears`,d:`Jafar Panahi`,c:`Iran`,y:2022,r:`7.5`,g:`Drama`,rt:`107 min`,desc:`Panahi directing a film while under house arrest in Iran — about censorship, borders, and artistic freedom. Special Jury Prize at Venice 2022.`},
+      {t:`Compartment No. 6`,d:`Juho Kuosmanen`,c:`Finland/Russia`,y:2021,r:`7.3`,g:`Romance`,rt:`107 min`,desc:`Two strangers share a train compartment to the Arctic Circle — a slow-burn love story of radiant gentleness. Grand Prix at Cannes 2021.`},
+      {t:`In the Rearview`,d:`Maciek Hamela`,c:`Poland/France/Ukraine`,y:2023,r:`7.4`,g:`Documentary`,rt:`84 min`,desc:`The director drives Ukrainian refugees in his car — their stories unfold in the backseat. Best Film at Kino Pavasaris 2024.`},
+    ]
+  },
+];
+
+
 // ── GENRES (derived + extras) ──────────────────────────────────────
 const ALL_GENRES = ["All","Animation","Art Cinema","Biopic","Comedy","Coming-of-age","Crime","Dark Comedy","Documentary","Drama","Historical","Horror","Musical","Romance","Satire","Sci-Fi","Thriller","Western"];
 
 // ── STATE ──────────────────────────────────────────────────────────
-const festOrder = ['cannes','venice','berlin','sundance','kino'];
-const festShort = {cannes:'Cannes',venice:'Venice',berlin:'Berlinale',sundance:'Sundance',kino:'Kino Pavasaris'};
+const festOrder = ['cannes','venice','berlin','sundance','kino','mubi'];
+const festShort = {cannes:'Cannes',venice:'Venice',berlin:'Berlinale',sundance:'Sundance',kino:'Kino Pavasaris',mubi:'MUBI Picks'};
 const YEARS = [2025,2024,2023,2022,2021,2020];
 
 let activeFest = 'cannes';
@@ -484,6 +567,7 @@ let activeYear = 2025;
 let activeGenre = 'All';
 let hideSeen = false;
 let genreMode = false;
+let mubiMode = false;
 
 // ── STORAGE ───────────────────────────────────────────────────────
 function seenKey(fest,year,title){return `seen:${fest}:${year}:${title.replace(/\s+/g,'_')}`}
@@ -502,6 +586,7 @@ function iconText(s){return s==='winner'?'★':s==='runner'?'◆':s==='buzz'?'�
 function pillClass(s){return s==='winner'?'pill-w':s==='runner'?'pill-r':s==='buzz'?'pill-b':'pill-n'}
 
 function seenCount(fest){
+  if(!DATA[fest])return {seen:0,total:0};
   let total=0,seen=0;
   YEARS.forEach(y=>{
     (DATA[fest].years[y]||[]).forEach(f=>{total++;if(isSeen(fest,y,f.t))seen++;});
@@ -518,13 +603,18 @@ function renderMobileNav(){
   if(!nav)return;
   // icons: film reel, film strip, clapperboard, sun, leaf
   const icons={
-    cannes:'🎬',venice:'🦁',berlin:'🐻',sundance:'☀',kino:'🌿'
+    cannes:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <!-- Palm frond -->  <path d="M14 22 Q10 16 6 10 Q9 13 12 12 Q9 9 8 4 Q11 8 13 11 Q12 7 13 3 Q15 7 14 11 Q16 8 19 4 Q18 9 15 12 Q18 13 21 10 Q18 16 14 22Z" fill="currentColor"/>  <line x1="14" y1="22" x2="14" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/> </svg>`,
+    venice:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <!-- Lion body -->  <circle cx="14" cy="15" r="5" fill="currentColor"/>  <!-- Wings -->  <path d="M9 15 Q4 10 3 5 Q6 9 9 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>  <path d="M9 13 Q5 8 5 3 Q8 7 10 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>  <path d="M19 15 Q24 10 25 5 Q22 9 19 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>  <path d="M19 13 Q23 8 23 3 Q20 7 18 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>  <!-- Tail -->  <path d="M14 20 Q14 24 17 26" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>  <!-- Eye -->  <circle cx="12" cy="14" r="1" fill="var(--bg)"/> </svg>`,
+    berlin:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <!-- Bear body -->  <ellipse cx="14" cy="18" rx="7" ry="6" fill="currentColor"/>  <!-- Head -->  <circle cx="14" cy="11" r="5" fill="currentColor"/>  <!-- Ears -->  <circle cx="10" cy="7" r="2.2" fill="currentColor"/>  <circle cx="18" cy="7" r="2.2" fill="currentColor"/>  <!-- Eyes -->  <circle cx="12.5" cy="11" r="1" fill="var(--bg)"/>  <circle cx="15.5" cy="11" r="1" fill="var(--bg)"/>  <!-- Nose -->  <circle cx="14" cy="13.5" r="1.2" fill="var(--bg)"/>  <!-- Legs -->  <rect x="8" y="22" width="3" height="4" rx="1.5" fill="currentColor"/>  <rect x="17" y="22" width="3" height="4" rx="1.5" fill="currentColor"/> </svg>`,
+    sundance:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <!-- Sun -->  <circle cx="14" cy="10" r="3.5" fill="currentColor"/>  <!-- Rays -->  <line x1="14" y1="4" x2="14" y2="2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="19.5" y1="5.5" x2="21" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="22" y1="10" x2="24" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="19.5" y1="14.5" x2="21" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="8.5" y1="5.5" x2="7" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="6" y1="10" x2="4" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <line x1="8.5" y1="14.5" x2="7" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>  <!-- Mountain -->  <path d="M2 26 L9 16 L14 21 L19 14 L26 26Z" fill="currentColor"/> </svg>`,
+    kino:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <!-- Film strip frame -->  <rect x="3" y="8" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>  <!-- Sprockets -->  <rect x="5" y="10" width="2.5" height="2.5" rx=".5" fill="currentColor"/>  <rect x="5" y="17" width="2.5" height="2.5" rx=".5" fill="currentColor"/>  <rect x="20.5" y="10" width="2.5" height="2.5" rx=".5" fill="currentColor"/>  <rect x="20.5" y="17" width="2.5" height="2.5" rx=".5" fill="currentColor"/>  <!-- Leaf inside frame -->  <path d="M14 20 Q10 17 10 13 Q10 9 14 9 Q18 9 18 13 Q18 17 14 20Z" fill="currentColor"/>  <line x1="14" y1="20" x2="14" y2="22" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".5"/> </svg>`,
+    mubi:`<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">  <circle cx="14" cy="14" r="11" stroke="currentColor" stroke-width="1.5" fill="none"/>  <!-- M letterform -->  <path d="M8 19 L8 10 L14 16 L20 10 L20 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/> </svg>`
   };
   let h='';
   festOrder.forEach(id=>{
     const {seen,total}=seenCount(id);
     h+=`<button class="mob-nav-btn${id===activeFest?' active':''}" onclick="setFest('${id}')">
-      <span style="font-size:1.15rem;line-height:1">${icons[id]}</span>
+      <span class="mob-nav-icon">${icons[id]}</span>
       <span>${festShort[id]}</span>
       <span class="mob-nav-dot"></span>
     </button>`;
@@ -552,6 +642,12 @@ function renderSidebar(){
     const isActive=genreMode&&activeGenre===g;
     h+=`<button class="sb-btn${isActive?' active':''}" style="${isActive?'':'color:var(--dim)'}" onclick="setGenre('${g}')">${g}</button>`;
   });
+  // MUBI seen count in sidebar
+  if(mubiMode){
+    let ms=0,mt=0;
+    MUBI_COLLECTIONS.forEach(c=>c.films.forEach(f=>{mt++;if(isMubiSeen(f.t))ms++;}));
+    if(ms>0)h+=`<div class="seen-count" style="margin-top:.6rem">✓ ${ms} of ${mt} MUBI picks seen</div>`;
+  }
   document.getElementById('sidebar').innerHTML=h;
 }
 
@@ -595,16 +691,116 @@ function filmCardHTML(film,fest,year,i,groupLabel){
     </div>`;
 }
 
-// ── GENRE BROWSER (all fests + all years) ────────────────────────
+// ── MUBI VIEW ────────────────────────────────────────────────────
+function mubiSeenKey(title){return `mubi_seen:${title.replace(/\s+/g,'_')}`}
+function isMubiSeen(title){try{return localStorage.getItem(mubiSeenKey(title))==='1'}catch(e){return false}}
+function toggleMubiSeen(title){
+  try{const k=mubiSeenKey(title);localStorage.getItem(k)==='1'?localStorage.removeItem(k):localStorage.setItem(k,'1');}catch(e){}
+}
+
+function renderMubiView(){
+  let h=`
+    <div class="fest-head">
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <div class="fest-name">MUBI Picks</div>
+        <span class="tag tag-award" style="font-size:.62rem">Curated</span>
+      </div>
+      <div class="tags">
+        <span class="tag tag-loc">Streaming · Global</span>
+      </div>
+      <p class="fest-desc">A curated selection of essential arthouse films grouped by mood and theme — the kind of cinema MUBI champions. Films are hand-picked across recent years; availability varies by region.</p>
+    </div>
+    <div class="controls" style="padding-bottom:1rem">
+      <button class="hide-seen-btn${hideSeen?' active':''}" onclick="toggleHideSeen()">${hideSeen?'Show all':'Hide seen'}</button>
+    </div>`;
+
+  MUBI_COLLECTIONS.forEach(col=>{
+    let colSeen=0;
+    col.films.forEach(f=>{if(isMubiSeen(f.t))colSeen++;});
+    h+=`<div class="sec-label" style="margin-top:1.6rem">
+      <span style="font-size:.9rem;margin-right:.4rem">${col.icon}</span>
+      ${col.label}
+      ${colSeen>0?`<span style="font-size:.62rem;color:var(--seen);margin-left:.4rem;font-weight:400;letter-spacing:0">✓ ${colSeen}/${col.films.length}</span>`:''}
+    </div>
+    <p style="font-size:.8rem;color:var(--dim);margin-bottom:.9rem;line-height:1.6;max-width:600px">${col.desc}</p>`;
+    col.films.forEach((film,i)=>{
+      const uid=`mubi_${col.id}_${i}`;
+      const seen=isMubiSeen(film.t);
+      if(hideSeen&&seen){h+=`<div class="film-card hidden-seen"></div>`;return;}
+      h+=`
+        <div class="film-card${seen?' seen':''}" id="card-${uid}">
+          <div class="card-head" onclick="toggle('${uid}',event)">
+            <div class="card-icon ci-buzz" style="background:rgba(180,120,200,.2);color:#c090e0;font-size:.65rem">M</div>
+            <div class="card-titles">
+              <div class="card-title">${film.t}</div>
+              <div class="card-sub">Dir. ${film.d}${film.c?' · '+film.c:''} · ${film.y}</div>
+            </div>
+            <div class="card-right">
+              ${film.g?`<span class="genre-badge">${film.g}</span>`:''}
+              ${film.r?`<span class="rating">★ ${film.r}</span>`:''}
+              <div class="seen-cb-wrap" onclick="toggleMubiSeenCard('${film.t.replace(/'/g,"\\'")}','${uid}',event)">
+                <div class="seen-cb" title="${seen?'Mark unseen':'Mark as seen'}">
+                  <span class="seen-check">✓</span>
+                </div>
+              </div>
+              <span class="chevron">▼</span>
+            </div>
+          </div>
+          <div class="card-detail">
+            <p class="detail-desc">${film.desc}</p>
+            <div>
+              ${film.g?`<div class="detail-row"><span class="dk">Genre</span><span class="dv"><strong>${film.g}</strong></span></div>`:''}
+              ${film.rt?`<div class="detail-row"><span class="dk">Runtime</span><span class="dv">${film.rt}</span></div>`:''}
+              ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
+              ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
+              ${film.y?`<div class="detail-row"><span class="dk">Year</span><span class="dv">${film.y}</span></div>`:''}
+              ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>★ ${film.r}</strong></span></div>`:''}
+            </div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem">
+              <a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>
+              <a class="trailer-link" style="border-color:rgba(180,120,200,.35);color:#c090e0" href="https://mubi.com/search?q=${encodeURIComponent(film.t)}" target="_blank" rel="noopener">▶ Find on MUBI</a>
+            </div>
+          </div>
+        </div>`;
+    });
+  });
+  document.getElementById('content').innerHTML=h;
+}
+
+// ── GENRE BROWSER (all fests + all years, deduped) ───────────────
 function renderGenreView(){
-  let matched=0;
+  // Collect all films matching genre, group by canonical title
+  // If same title appears in multiple places, merge appearances into one card
+  const byTitle = new Map();
+  festOrder.filter(f=>f!=='mubi'&&DATA[f]).forEach(fest=>{
+    YEARS.forEach(year=>{
+      (DATA[fest]&&DATA[fest].years[year]||[]).filter(f=>f.g===activeGenre).forEach(film=>{
+        const key = film.t.toLowerCase().trim();
+        if(!byTitle.has(key)){
+          byTitle.set(key, {film, appearances:[{fest,year,award:film.a,status:film.s}]});
+        } else {
+          byTitle.get(key).appearances.push({fest,year,award:film.a,status:film.s});
+        }
+      });
+    });
+  });
+
+  const entries = Array.from(byTitle.values());
+  // Sort: winners first, then runners, then buzz, then notable
+  const rank = {winner:0,runner:1,buzz:2,notable:3};
+  entries.sort((a,b)=>{
+    const ra = Math.min(...a.appearances.map(x=>rank[x.status]??3));
+    const rb = Math.min(...b.appearances.map(x=>rank[x.status]??3));
+    return ra-rb;
+  });
+
   let h=`
     <div class="fest-head">
       <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
         <div class="fest-name" style="font-size:1.4rem">${activeGenre}</div>
         <button onclick="clearGenre()" style="background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.72rem;padding:.25rem .65rem;border-radius:20px;cursor:pointer">\u2715 Clear filter</button>
       </div>
-      <p class="fest-desc" style="margin-top:.5rem">All <strong style="color:var(--text)">${activeGenre}</strong> films across every festival and year — 2020 to 2025.</p>
+      <p class="fest-desc" style="margin-top:.5rem"><strong style="color:var(--text)">${entries.length} ${activeGenre}</strong> films across every festival and year — 2020 to 2025. Duplicates merged.</p>
     </div>
     <div class="controls" style="padding-bottom:1rem">
       <select class="genre-sel" onchange="setGenre(this.value)">`;
@@ -618,22 +814,70 @@ function renderGenreView(){
       <div class="leg-item"><span class="leg-dot ld-b"></span>Notable buzz</div>
       <div class="leg-item"><span class="leg-dot ld-n"></span>Entry</div>
     </div>`;
-  festOrder.forEach(fest=>{
-    YEARS.forEach(year=>{
-      const films=(DATA[fest].years[year]||[]).filter(f=>f.g===activeGenre);
-      if(!films.length)return;
-      h+=`<div class="sec-label">${festShort[fest]} \u00b7 ${year}</div>`;
-      films.forEach((film,i)=>{matched++;h+=filmCardHTML(film,fest,year,i,`${fest}_${year}`);});
+
+  if(!entries.length){
+    h+=`<div class="empty-msg">No films found for "${activeGenre}".</div>`;
+  } else {
+    entries.forEach(({film,appearances},i)=>{
+      const bestStatus = appearances.reduce((best,a)=>(rank[a.status]??3)<(rank[best]??3)?a.status:best, appearances[0].status);
+      const isWinner = bestStatus==='winner';
+      const uid=`genre_${activeGenre}_${i}`;
+      const fest0=appearances[0].fest;
+      const year0=appearances[0].year;
+      const seen=isSeen(fest0,year0,film.t);
+      const seenHidden=hideSeen&&seen;
+
+      // Build appearances badge string
+      const appBadges = appearances.map(a=>{
+        const col = a.status==='winner'?'var(--gold)':a.status==='runner'?'var(--muted)':a.status==='buzz'?'#7fa8cc':'var(--dim)';
+        return `<span style="font-size:.6rem;color:${col};background:var(--surf2);padding:.12rem .45rem;border-radius:3px;white-space:nowrap">${festShort[a.fest]} ${a.year}</span>`;
+      }).join(' ');
+
+      h+=`
+        <div class="film-card${isWinner?' winner':''}${seen?' seen':''}${seenHidden?' hidden-seen':''}" id="card-${uid}">
+          <div class="card-head" onclick="toggle('${uid}',event)">
+            <div class="card-icon ${iconClass(bestStatus)}">${iconText(bestStatus)}</div>
+            <div class="card-titles">
+              <div class="card-title">${film.t}</div>
+              <div class="card-sub">Dir. ${film.d}${film.c?' · '+film.c:''}</div>
+            </div>
+            <div class="card-right">
+              ${film.r?`<span class="rating">\u2605 ${film.r}</span>`:''}
+              <div class="seen-cb-wrap" onclick="toggleSeenCard('${fest0}','${year0}','${film.t.replace(/'/g,"\\'")}','${uid}',event)">
+                <div class="seen-cb" title="${seen?'Mark unseen':'Mark as seen'}">
+                  <span class="seen-check">\u2713</span>
+                </div>
+              </div>
+              <span class="chevron">\u25bc</span>
+            </div>
+          </div>
+          <div class="card-detail">
+            ${film.desc?`<p class="detail-desc">${film.desc}</p>`:''}
+            <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin:.6rem 0 .4rem">
+              <span style="font-size:.67rem;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;padding-top:2px">Appeared at</span>
+              ${appBadges}
+            </div>
+            <div>
+              ${film.g?`<div class="detail-row"><span class="dk">Genre</span><span class="dv"><strong>${film.g}</strong></span></div>`:''}
+              ${film.rt?`<div class="detail-row"><span class="dk">Runtime</span><span class="dv">${film.rt}</span></div>`:''}
+              ${film.d?`<div class="detail-row"><span class="dk">Director</span><span class="dv"><strong>${film.d}</strong></span></div>`:''}
+              ${film.c?`<div class="detail-row"><span class="dk">Country</span><span class="dv">${film.c}</span></div>`:''}
+              ${film.r?`<div class="detail-row"><span class="dk">IMDb</span><span class="dv"><strong>\u2605 ${film.r}</strong></span></div>`:''}
+            </div>
+            ${film.t&&film.t.indexOf('Festival cancelled')<0&&film.t.indexOf('Winner not confirmed')<0?`<a class="trailer-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(film.t+' '+film.d+' official trailer')}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Watch trailer</a>`:''}
+          </div>
+        </div>`;
     });
-  });
-  if(!matched)h+=`<div class="empty-msg">No films found for "${activeGenre}".</div>`;
+  }
   document.getElementById('content').innerHTML=h;
 }
 
 // ── RENDER CONTENT (normal festival/year view) ────────────────────
 function renderContent(){
+  if(mubiMode){renderMubiView();return;}
   if(genreMode){renderGenreView();return;}
   const f=DATA[activeFest];
+  if(!f){renderMubiView();return;}
   const films=(f.years[activeYear]||[]);
   const groups=[
     {label:'Winner',list:films.filter(f=>f.s==='winner')},
@@ -709,6 +953,11 @@ function toggle(uid,e){
     });
   }
 }
+function toggleMubiSeenCard(title,uid,e){
+  e.stopPropagation();
+  toggleMubiSeen(title);
+  renderAll();
+}
 function toggleSeenCard(fest,year,title,uid,e){
   e.stopPropagation();
   toggleSeen(fest,parseInt(year),title);
@@ -716,8 +965,10 @@ function toggleSeenCard(fest,year,title,uid,e){
 }
 function setFest(id){
   activeFest=id;
+  mubiMode=(id==='mubi');
+  genreMode=false;
+  activeGenre='All';
   renderAll();
-  // scroll content to top on mobile
   if(isMobile())window.scrollTo({top:0,behavior:'smooth'});
 }
 function setYear(y){activeYear=y;renderAll()}
